@@ -1,0 +1,4197 @@
+<!DOCTYPE html>
+<!--
+  정희정 · 꽃폈네 디지털 우주 지도 — 단일 파일 버전
+  이 파일 하나로 사이트가 전부 동작합니다 (외부 파일 없음).
+  자료를 고치려면 아래 'DATA' 표시가 있는 <script> 블록만 수정하세요.
+  원본 소스: index.html + style.css + data.js + app.js (build.py 로 합침)
+-->
+
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>정희정 · 꽃폈네 — 디지털 우주 지도</title>
+<meta name="description" content="농사와 AI와 글 사이를 오가는 정희정(꽃폈네)의 개인 지식·포트폴리오 지도. 밀양 초동의 밭, 밀양여중 AI 동아리, 웹 플립북과 자전 에세이까지 한자리에.">
+<meta name="theme-color" content="#05060f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="정희정 · 꽃폈네 — 디지털 우주 지도">
+<meta property="og:description" content="농사와 AI와 글 사이를 오가는 정희정(꽃폈네)의 개인 지식·포트폴리오 지도.">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff3c4'/%3E%3Cstop offset='1' stop-color='%23ffb347'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='26' fill='url(%23g)'/%3E%3Cellipse cx='50' cy='50' rx='44' ry='17' fill='none' stroke='%2378d6ff' stroke-width='3' opacity='.7' transform='rotate(-24 50 50)'/%3E%3Ccircle cx='13' cy='38' r='6' fill='%23ff8fb1'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ==========================================================================
+   정희정 · 꽃폈네 디지털 우주 지도  —  style.css
+   ========================================================================== */
+
+/* ── tokens ─────────────────────────────────────────────── */
+:root{
+  --bg:#05060f;
+  --bg-2:#080b1a;
+  --ink:#f2f5ff;
+  --ink-soft:#c9d3ec;
+  --dim:#8b96b8;
+  --line:rgba(255,255,255,.105);
+  --line-strong:rgba(255,255,255,.2);
+  --glass:rgba(13,17,36,.72);
+  --glass-2:rgba(20,26,50,.72);
+  --accent:#ffc857;
+  --radius:22px;
+  --topbar-h:66px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--ink);
+  letter-spacing:-.012em;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+body.list-open{overflow:hidden}
+button{font-family:inherit;color:inherit}
+a{color:inherit}
+img,svg,canvas{display:block}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+kbd{
+  font-family:var(--font);font-size:11px;line-height:1;padding:3px 5px;border-radius:6px;
+  border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--dim);
+}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;color:#ffd98a}
+::selection{background:rgba(255,200,87,.28)}
+
+/* ── 배경: 별 · 성운 ─────────────────────────────────────── */
+#stars{
+  position:fixed;inset:0;z-index:0;width:100%;height:100%;
+  pointer-events:none;
+}
+.nebula{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.nebula span{
+  position:absolute;display:block;border-radius:50%;filter:blur(90px);opacity:.5;
+  animation:nebulaDrift 26s var(--ease) infinite alternate;
+}
+.nebula-a{width:58vmax;height:56vmax;left:-16vmax;top:-18vmax;
+  background:radial-gradient(circle at 50% 50%,rgba(120,70,220,.55),rgba(60,30,140,0) 68%);}
+.nebula-b{width:52vmax;height:52vmax;right:-18vmax;bottom:-16vmax;
+  background:radial-gradient(circle at 50% 50%,rgba(20,120,180,.42),rgba(10,50,120,0) 70%);
+  animation-delay:-8s}
+.nebula-c{width:40vmax;height:40vmax;left:42%;top:48%;
+  background:radial-gradient(circle at 50% 50%,rgba(255,120,170,.16),rgba(255,120,170,0) 70%);
+  animation-delay:-15s}
+@keyframes nebulaDrift{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(3vmax,-2vmax,0) scale(1.12)}
+}
+
+/* ── 상단 바 ─────────────────────────────────────────────── */
+.topbar{
+  position:fixed;z-index:45;inset:0 0 auto 0;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px clamp(14px,3vw,26px);
+  padding-top:calc(14px + env(safe-area-inset-top,0px));
+  background:linear-gradient(180deg,rgba(5,6,15,.86),rgba(5,6,15,0));
+  backdrop-filter:blur(2px);
+}
+.brand{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  padding:6px 12px 6px 8px;border-radius:999px;
+  border:1px solid transparent;transition:border-color .25s var(--ease),background .25s var(--ease);
+}
+.brand:hover,.brand:focus-visible{border-color:var(--line);background:rgba(255,255,255,.04);outline:none}
+.brand-mark{display:grid;place-items:center;width:26px;height:26px;flex:none;
+  filter:drop-shadow(0 0 10px rgba(255,180,71,.5))}
+.brand-text{display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+.brand-text strong{font-size:15px;font-weight:700;letter-spacing:-.02em}
+.brand-text em{font-style:normal;font-size:14px;font-weight:500;color:#ffd98a}
+.brand-sub{
+  display:block;font-size:10.5px;letter-spacing:.16em;color:var(--dim);font-weight:500;
+  text-transform:uppercase;margin-left:2px;
+}
+.tools{display:flex;align-items:center;gap:8px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  height:38px;padding:0 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(16,21,42,.6);
+  color:var(--ink-soft);font-size:13px;font-weight:600;letter-spacing:-.01em;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:transform .18s var(--ease),border-color .18s var(--ease),background .18s var(--ease),color .18s var(--ease);
+}
+.pill:hover{border-color:var(--line-strong);background:rgba(30,38,72,.78);color:#fff;transform:translateY(-1px)}
+.pill:active{transform:translateY(0) scale(.98)}
+.pill:focus-visible{outline:2px solid rgba(255,200,87,.75);outline-offset:2px}
+.pill .ico{font-size:13px;line-height:1;filter:saturate(1.15)}
+.pill-accent{
+  border-color:rgba(255,200,87,.4);
+  background:linear-gradient(180deg,rgba(255,200,87,.16),rgba(255,160,60,.08));
+  color:#ffe6b0;
+}
+.pill-accent:hover{background:linear-gradient(180deg,rgba(255,200,87,.26),rgba(255,160,60,.14));border-color:rgba(255,200,87,.7)}
+.pill[aria-pressed="true"]{border-color:rgba(143,184,255,.55);background:rgba(60,95,190,.24);color:#dbe8ff}
+
+/* ── 무대(우주) ──────────────────────────────────────────── */
+.stage{
+  position:fixed;inset:0;z-index:10;
+  display:grid;place-items:center;
+  padding:calc(var(--topbar-h) + env(safe-area-inset-top,0px)) 0 0;
+  transition:opacity .32s var(--ease);
+}
+body.list-open .stage{opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+
+.solar{position:relative;width:100%;height:100%;min-height:0}
+
+/* 궤도 */
+.orbits{position:absolute;inset:0;pointer-events:none}
+.orbit{
+  position:absolute;left:50%;top:50%;
+  border-radius:50%;
+  border:1px solid rgba(160,190,255,.13);
+  transform:translate(-50%,-50%);
+  box-shadow:inset 0 0 40px rgba(120,160,255,.03);
+}
+.orbit.is-dashed{border-style:dashed;border-color:rgba(160,190,255,.1)}
+.orbit::after{
+  content:"";position:absolute;inset:-6px;border-radius:50%;
+  box-shadow:0 0 24px rgba(120,160,255,.06);
+  pointer-events:none;
+}
+
+/* 태양 */
+.sun{
+  position:absolute;left:50%;top:50%;z-index:6;
+  width:var(--sun,132px);height:var(--sun,132px);
+  transform:translate(-50%,-50%);
+  padding:0;border:0;background:none;cursor:pointer;
+  display:grid;place-items:center;
+  border-radius:50%;
+}
+.sun-core{
+  position:absolute;inset:18%;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 34% 30%,#fffdf2 0%,#ffe9a8 32%,#ffc857 58%,#ff9d3c 82%,#f4741f 100%);
+  box-shadow:
+    0 0 22px rgba(255,215,120,.9),
+    0 0 60px rgba(255,170,60,.55),
+    0 0 130px rgba(255,140,50,.32),
+    inset 0 -8px 22px rgba(200,80,0,.35);
+  animation:sunBreathe 6.5s ease-in-out infinite;
+}
+.sun-corona{
+  position:absolute;inset:-12%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,205,110,.42),rgba(255,160,60,.12) 45%,rgba(255,140,50,0) 72%);
+  filter:blur(10px);
+  animation:sunBreathe 6.5s ease-in-out infinite reverse;
+}
+.sun-flare{
+  position:absolute;inset:-32%;border-radius:50%;
+  background:conic-gradient(from 0deg,
+    rgba(255,210,130,.16) 0deg,transparent 16deg,transparent 30deg,
+    rgba(255,190,100,.13) 44deg,transparent 60deg,transparent 96deg,
+    rgba(255,210,130,.14) 112deg,transparent 130deg,transparent 168deg,
+    rgba(255,190,100,.12) 182deg,transparent 200deg,transparent 236deg,
+    rgba(255,210,130,.15) 250deg,transparent 268deg,transparent 300deg,
+    rgba(255,190,100,.12) 314deg,transparent 330deg,transparent 360deg);
+  filter:blur(14px);opacity:.85;
+  animation:spin 90s linear infinite;
+  pointer-events:none;
+}
+.sun-label{
+  position:absolute;top:calc(100% - 6px);left:50%;transform:translateX(-50%);
+  text-align:center;white-space:nowrap;pointer-events:none;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.sun-label strong{
+  display:block;font-size:15px;font-weight:700;color:#fff1cf;
+  letter-spacing:-.01em;
+}
+.sun-label em{
+  display:block;font-style:normal;font-size:10.5px;color:rgba(255,235,190,.55);
+  letter-spacing:.02em;margin-top:2px;
+}
+.sun:hover .sun-core,.sun:focus-visible .sun-core{animation-duration:3s}
+.sun:focus-visible{outline:2px solid rgba(255,215,120,.8);outline-offset:6px}
+@keyframes sunBreathe{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.055);opacity:.94}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 행성 */
+.planet-layer{position:absolute;inset:0}
+.planet{
+  position:absolute;left:0;top:0;
+  width:var(--size,86px);height:var(--size,86px);
+  transform:translate(-50%,-50%);
+  padding:0;border:0;border-radius:50%;cursor:pointer;
+  background:none;
+  transition:filter .25s var(--ease);
+  will-change:transform,left,top;
+  -webkit-tap-highlight-color:transparent;
+}
+.planet-body{
+  position:absolute;inset:0;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--c);
+  background:
+    radial-gradient(circle at 32% 26%,color-mix(in srgb,var(--c) 82%,#fff 18%) 0%,var(--c) 46%,color-mix(in srgb,var(--c) 55%,#0a0d1c 45%) 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.13),0 8px 26px rgba(0,0,0,.45);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.13),
+    0 8px 26px rgba(0,0,0,.45),
+    0 0 34px color-mix(in srgb,var(--c) 45%,transparent);
+  transition:transform .28s var(--ease),box-shadow .28s var(--ease);
+  overflow:hidden;
+}
+.planet-body::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 70% 78%,rgba(0,0,0,.34),transparent 62%);
+  mix-blend-mode:multiply;
+}
+.planet-ico{
+  position:relative;z-index:2;
+  font-size:calc(var(--size,86px) * .4);line-height:1;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.45));
+  transform:translateY(1px);
+}
+.planet-ring{
+  position:absolute;inset:-9%;border-radius:50%;
+  border:1px solid rgba(255,255,255,.28);
+  border-color:color-mix(in srgb,var(--c) 60%,transparent);
+  opacity:.5;transform:rotate(-18deg) scaleY(.42);
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+  pointer-events:none;
+}
+.planet-name{
+  position:absolute;left:50%;top:calc(100% + 9px);transform:translateX(-50%);
+  white-space:nowrap;font-size:var(--label,12.5px);font-weight:650;
+  color:#e8eeff;letter-spacing:-.015em;
+  text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 20px rgba(0,0,0,.6);
+  transition:color .25s var(--ease),text-shadow .25s var(--ease);
+}
+.planet-count{
+  position:absolute;left:50%;top:calc(100% + 9px + var(--label,12.5px) + 5px);
+  transform:translateX(-50%);
+  font-size:10.5px;font-weight:500;color:rgba(190,205,235,.62);white-space:nowrap;
+  letter-spacing:.02em;text-shadow:0 2px 10px rgba(0,0,0,.9);
+}
+.planet:hover .planet-body,.planet:focus-visible .planet-body{
+  transform:scale(1.085);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.3),
+    0 10px 30px rgba(0,0,0,.5),
+    0 0 48px color-mix(in srgb,var(--c) 62%,transparent);
+}
+.planet:hover .planet-ring{opacity:1;transform:rotate(-18deg) scaleY(.5) scale(1.06)}
+.planet:hover .planet-name{color:#fff}
+.planet:focus-visible{outline:none}
+.planet:focus-visible .planet-body{outline:2px solid rgba(255,255,255,.9);outline-offset:3px}
+.planet.is-active .planet-body{
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.85),
+    0 0 0 7px color-mix(in srgb,var(--c) 30%,transparent),
+    0 0 60px color-mix(in srgb,var(--c) 70%,transparent);
+}
+.planet.is-active .planet-name{color:#fff}
+.planet.is-dim{opacity:.42;filter:saturate(.5)}
+.planet.is-offscreen{opacity:.55}
+.planet.pulse .planet-body{animation:planetPulse 2.6s ease-in-out infinite}
+@keyframes planetPulse{
+  0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.16),0 8px 26px rgba(0,0,0,.45),0 0 26px color-mix(in srgb,var(--c) 40%,transparent)}
+  50%{box-shadow:0 0 0 1px rgba(255,255,255,.22),0 8px 26px rgba(0,0,0,.45),0 0 50px color-mix(in srgb,var(--c) 72%,transparent)}
+}
+
+/* 안내 · 개수 */
+.hint{
+  position:absolute;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);
+  margin:0;display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(180,196,230,.66);white-space:nowrap;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.07);background:rgba(10,14,30,.5);
+  backdrop-filter:blur(8px);
+  transition:opacity .4s var(--ease);
+}
+.hint-dot{width:5px;height:5px;border-radius:50%;background:#ffc857;box-shadow:0 0 8px #ffc857}
+.hint-sep{opacity:.4}
+body.list-open .hint{opacity:0}
+.count-badge{
+  position:absolute;left:50%;top:calc(var(--topbar-h) + 6px);transform:translateX(-50%);
+  font-size:11px;letter-spacing:.14em;color:rgba(170,188,225,.5);
+  text-transform:uppercase;pointer-events:none;
+}
+
+/* ── 우측 패널 (데스크톱) ─────────────────────────────────── */
+.scrim{
+  position:fixed;inset:0;z-index:48;
+  background:rgba(3,5,12,.6);backdrop-filter:blur(3px);
+  opacity:0;transition:opacity .3s var(--ease);
+}
+.scrim.show{opacity:1}
+
+.panel{
+  position:fixed;z-index:50;top:0;right:0;bottom:0;
+  width:min(462px,94vw);
+  display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(15,19,40,.96),rgba(8,11,25,.98));
+  border-left:1px solid var(--line);
+  box-shadow:-30px 0 70px rgba(0,0,0,.55);
+  transform:translateX(102%);
+  transition:transform .42s var(--ease);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.panel.open{transform:translateX(0)}
+.panel-grip{display:none}
+.panel-scroll{overflow-y:auto;overscroll-behavior:contain;padding:26px 24px 40px;scrollbar-width:thin}
+.panel-scroll::-webkit-scrollbar{width:9px}
+.panel-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.13);border-radius:9px;border:3px solid transparent;background-clip:padding-box}
+
+.panel-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;position:relative}
+.panel-orb{
+  flex:none;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  font-size:24px;background:var(--c);
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--c) 82%,#fff 18%),var(--c) 52%,color-mix(in srgb,var(--c) 50%,#0a0d1c 50%));
+  box-shadow:0 0 0 1px rgba(255,255,255,.16),0 0 26px rgba(0,0,0,.3);
+  box-shadow:0 0 0 1px rgba(255,255,255,.16),0 0 26px color-mix(in srgb,var(--c) 48%,transparent);
+}
+.panel-id{min-width:0;flex:1}
+.panel-sub{margin:2px 0 4px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 78%,#fff 22%);font-weight:600}
+.panel-title{margin:0;font-size:22px;font-weight:750;letter-spacing:-.03em;line-height:1.24}
+.panel-close{
+  flex:none;width:34px;height:34px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);
+  color:var(--ink-soft);font-size:14px;display:grid;place-items:center;
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.panel-close:hover{background:rgba(255,255,255,.13);transform:rotate(90deg)}
+.panel-summary{
+  margin:0 0 20px;font-size:13.5px;line-height:1.66;color:var(--ink-soft);
+  padding-bottom:18px;border-bottom:1px solid var(--line);
+}
+.panel-list{display:flex;flex-direction:column;gap:12px}
+.panel-foot{margin-top:22px;font-size:11.5px;color:rgba(160,175,205,.55);text-align:center;letter-spacing:.06em}
+
+/* 자료 카드 */
+.item{
+  border:1px solid var(--line);border-radius:18px;
+  background:rgba(255,255,255,.032);
+  padding:16px 16px 14px;
+  transition:border-color .22s var(--ease),background .22s var(--ease),transform .22s var(--ease);
+  scroll-margin-top:20px;
+}
+.item:hover{border-color:color-mix(in srgb,var(--c) 42%,rgba(255,255,255,.16));background:rgba(255,255,255,.055)}
+.item.flash{animation:flash 1.5s var(--ease)}
+@keyframes flash{
+  0%,100%{box-shadow:0 0 0 0 transparent}
+  20%,60%{box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 70%,transparent),0 0 30px color-mix(in srgb,var(--c) 40%,transparent)}
+}
+.item-meta{
+  display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  color:color-mix(in srgb,var(--c) 80%,#fff 20%);
+  margin-bottom:7px;
+}
+.item-title{margin:0 0 7px;font-size:15.5px;font-weight:700;letter-spacing:-.02em;line-height:1.4}
+.item-desc{margin:0;font-size:13px;line-height:1.68;color:var(--ink-soft)}
+.item-tags{display:flex;flex-wrap:wrap;gap:5px;margin:11px 0 0;padding:0;list-style:none}
+.item-tags li{
+  font-size:10.5px;padding:3px 8px;border-radius:999px;
+  background:rgba(255,255,255,.06);color:rgba(200,212,240,.78);
+  border:1px solid rgba(255,255,255,.05);
+}
+.item-details{margin-top:11px;border-top:1px dashed rgba(255,255,255,.12);padding-top:9px}
+.item-details summary{
+  cursor:pointer;font-size:11.5px;color:color-mix(in srgb,var(--c) 75%,#fff 25%);
+  list-style:none;display:flex;align-items:center;gap:6px;
+}
+.item-details summary::-webkit-details-marker{display:none}
+.item-details summary::before{content:"▸";transition:transform .2s var(--ease);display:inline-block}
+.item-details[open] summary::before{transform:rotate(90deg)}
+.item-details ol{margin:9px 0 0;padding-left:20px;font-size:12.2px;line-height:1.85;color:rgba(200,212,240,.8)}
+.item-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.link-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:12px;font-weight:650;text-decoration:none;
+  padding:7px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.2);
+  border-color:color-mix(in srgb,var(--c) 38%,rgba(255,255,255,.14));
+  background:rgba(255,255,255,.07);
+  background:color-mix(in srgb,var(--c) 12%,rgba(255,255,255,.04));
+  color:#fff;
+  transition:background .18s var(--ease),border-color .18s var(--ease),transform .18s var(--ease);
+}
+.link-btn::after{content:"↗";font-size:10px;opacity:.7}
+.link-btn:hover{background:color-mix(in srgb,var(--c) 26%,rgba(255,255,255,.06));border-color:color-mix(in srgb,var(--c) 62%,transparent);transform:translateY(-1px)}
+.link-btn:focus-visible{outline:2px solid rgba(255,255,255,.8);outline-offset:2px}
+
+/* 소개(태양) 패널 */
+.about-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.about-chips li{font-size:11px;padding:5px 10px;border-radius:999px;background:rgba(255,200,87,.12);border:1px solid rgba(255,200,87,.28);color:#ffe6b0}
+.about-body p{margin:0 0 13px;font-size:13.5px;line-height:1.78;color:var(--ink-soft)}
+.about-body p:first-child{color:var(--ink)}
+.about-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+
+/* ── 평면 보기 ───────────────────────────────────────────── */
+.list-view{
+  position:fixed;inset:0;z-index:30;overflow-y:auto;overscroll-behavior:contain;
+  background:
+    radial-gradient(1200px 600px at 15% -10%,rgba(120,70,220,.16),transparent 70%),
+    radial-gradient(900px 500px at 90% 0%,rgba(20,120,180,.13),transparent 70%),
+    rgba(6,8,18,.97);
+  padding:calc(var(--topbar-h) + 26px + env(safe-area-inset-top,0px)) clamp(14px,4vw,40px) 40px;
+  animation:fadeUp .4s var(--ease) both;
+  scrollbar-width:thin;
+}
+.list-view::-webkit-scrollbar{width:10px}
+.list-view::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+.list-inner{max-width:1180px;margin:0 auto}
+.list-head{margin:0 0 30px}
+.list-head h1{margin:0 0 8px;font-size:clamp(22px,3.4vw,30px);font-weight:780;letter-spacing:-.035em}
+.list-head p{margin:0;font-size:13.5px;color:var(--dim);line-height:1.7}
+.list-group{margin:0 0 38px;scroll-margin-top:calc(var(--topbar-h) + 20px)}
+.list-group-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.list-group-orb{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:18px;flex:none;
+  background:var(--c);
+  background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--c) 82%,#fff 18%),var(--c) 52%,color-mix(in srgb,var(--c) 50%,#0a0d1c 50%));
+  box-shadow:0 0 0 1px rgba(255,255,255,.14),0 0 20px color-mix(in srgb,var(--c) 40%,transparent);
+}
+.list-group-title{margin:0;font-size:17px;font-weight:730;letter-spacing:-.025em}
+.list-group-sub{margin:2px 0 0;font-size:11.5px;color:color-mix(in srgb,var(--c) 70%,#fff 30%);letter-spacing:.02em}
+.list-group-sum{margin:0;font-size:12.5px;color:var(--dim);line-height:1.6;flex:1 1 240px}
+.list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:13px}
+.list-grid .item{background:rgba(255,255,255,.038)}
+.list-foot{max-width:1180px;margin:10px auto 0;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:var(--dim);line-height:1.7}
+.list-foot .dim{opacity:.6;margin-top:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── 오버레이 공통 ───────────────────────────────────────── */
+.overlay{position:fixed;inset:0;z-index:70;display:grid;place-items:start center;padding:min(12vh,110px) 16px 24px}
+.overlay[hidden]{display:none}
+.overlay-bg{position:absolute;inset:0;background:rgba(3,5,12,.72);backdrop-filter:blur(6px);animation:fadeIn .25s var(--ease)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* 검색 */
+.search-card{
+  position:relative;width:min(680px,94vw);max-height:min(72vh,640px);
+  display:flex;flex-direction:column;
+  border:1px solid var(--line-strong);border-radius:20px;
+  background:linear-gradient(180deg,rgba(17,22,44,.98),rgba(9,12,26,.99));
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  overflow:hidden;animation:popIn .3s var(--ease) both;
+}
+@keyframes popIn{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+.search-field{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.search-ico{font-size:14px;opacity:.8}
+.search-field input{
+  flex:1;min-width:0;background:none;border:0;outline:none;
+  font-family:inherit;font-size:15.5px;font-weight:600;color:var(--ink);
+  padding:2px 0;
+}
+.search-field input::placeholder{color:rgba(150,165,195,.55);font-weight:500}
+.search-close{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);cursor:pointer;font-size:12px;color:var(--ink-soft);
+  display:grid;place-items:center;flex:none;
+}
+.search-close:hover{background:rgba(255,255,255,.14)}
+.search-meta{padding:10px 18px;font-size:11.5px;color:var(--dim);border-bottom:1px solid var(--line);letter-spacing:.01em}
+.search-meta b{color:var(--ink-soft);font-weight:700}
+.search-results{overflow-y:auto;padding:8px;scrollbar-width:thin}
+.search-results::-webkit-scrollbar{width:9px}
+.search-results::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px;border:3px solid transparent;background-clip:padding-box}
+.sr{
+  display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;
+  padding:11px 12px;border-radius:13px;border:1px solid transparent;background:none;
+  cursor:pointer;transition:background .16s var(--ease),border-color .16s var(--ease);
+}
+.sr:hover,.sr:focus-visible{background:rgba(255,255,255,.06);border-color:var(--line);outline:none}
+.sr-orb{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:14px;
+  background:var(--c);
+  background:radial-gradient(circle at 34% 30%,color-mix(in srgb,var(--c) 84%,#fff 16%),var(--c) 60%);
+  box-shadow:0 0 14px color-mix(in srgb,var(--c) 40%,transparent)}
+.sr-main{min-width:0;flex:1}
+.sr.is-active{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}
+.sr-title{display:block;font-size:13.8px;font-weight:680;letter-spacing:-.015em;margin:0 0 3px;color:var(--ink)}
+.sr-desc{display:-webkit-box;font-size:11.8px;line-height:1.55;color:var(--dim);margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sr-cat{font-size:10px;color:color-mix(in srgb,var(--c) 72%,#fff 28%);letter-spacing:.06em;font-weight:600;white-space:nowrap;padding-top:3px}
+.sr mark{background:rgba(255,200,87,.28);color:#fff7e2;border-radius:3px;padding:0 1px}
+.search-empty{padding:34px 20px;text-align:center;font-size:13px;color:var(--dim);line-height:1.7}
+.search-hint{padding:10px 18px 14px;font-size:11px;color:rgba(150,165,195,.5);display:flex;gap:14px;flex-wrap:wrap}
+.search-hint span{display:inline-flex;align-items:center;gap:5px}
+.search-chips{display:flex;gap:6px;flex-wrap:wrap;padding:10px 18px 4px}
+.search-chips button{
+  font-size:11.5px;padding:5px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink-soft);
+}
+.search-chips button:hover{background:rgba(255,255,255,.1);border-color:var(--line-strong)}
+
+/* QR */
+.qr-card{
+  position:relative;width:min(380px,92vw);text-align:center;
+  border:1px solid var(--line-strong);border-radius:24px;
+  background:linear-gradient(180deg,rgba(19,24,48,.99),rgba(9,12,26,.99));
+  box-shadow:0 30px 80px rgba(0,0,0,.65);padding:24px 24px 22px;
+  animation:popIn .3s var(--ease) both;
+}
+.qr-close{
+  position:absolute;right:12px;top:12px;width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;color:var(--ink-soft);
+  font-size:12px;display:grid;place-items:center;
+}
+.qr-close:hover{background:rgba(255,255,255,.14)}
+.qr-eyebrow{margin:4px 0 6px;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,200,87,.8);font-weight:600}
+.qr-card h2{margin:0 0 18px;font-size:19px;font-weight:740;letter-spacing:-.03em}
+.qr-frame{
+  width:min(240px,64vw);margin:0 auto;padding:12px;border-radius:18px;
+  background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.2);
+}
+.qr-frame canvas{width:100%;height:auto;border-radius:6px;image-rendering:pixelated}
+.qr-url{
+  margin:14px 0 16px;font-size:12px;color:var(--ink-soft);word-break:break-all;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.5;
+}
+.qr-actions{display:flex;gap:8px;justify-content:center}
+.btn{
+  flex:1;max-width:160px;height:40px;border-radius:12px;cursor:pointer;
+  border:1px solid var(--line-strong);background:rgba(255,255,255,.06);
+  font-size:12.5px;font-weight:650;color:var(--ink);transition:background .18s var(--ease),transform .18s var(--ease);
+}
+.btn:hover{background:rgba(255,255,255,.13);transform:translateY(-1px)}
+.btn-primary{
+  border-color:rgba(255,200,87,.45);
+  background:linear-gradient(180deg,rgba(255,200,87,.9),rgba(255,170,60,.85));
+  color:#2a1a02;
+}
+.btn-primary:hover{background:linear-gradient(180deg,rgba(255,214,120,.98),rgba(255,180,70,.95))}
+.qr-note{margin:14px 0 0;font-size:11px;color:var(--dim)}
+
+/* 토스트 */
+.toast{
+  position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:90;
+  transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  padding:10px 18px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:rgba(24,30,56,.96);border:1px solid var(--line-strong);
+  box-shadow:0 12px 34px rgba(0,0,0,.5);
+  transition:opacity .25s var(--ease),transform .25s var(--ease);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ── 반응형 ─────────────────────────────────────────────── */
+@media (max-width:820px){
+  :root{--topbar-h:60px}
+  .brand-sub{display:none}
+  .brand-text strong{font-size:14px}
+  .pill{padding:0 11px;height:36px;font-size:12.5px}
+  .pill kbd{display:none}
+  .tools{gap:6px}
+}
+@media (max-width:620px){
+  .pill .lbl{display:none}
+  .pill{padding:0;width:38px;justify-content:center}
+  .pill-accent{width:38px}
+  .brand-text em{display:none}
+
+  .panel{
+    top:auto;left:0;right:0;bottom:0;width:auto;
+    height:auto;max-height:min(84svh,760px);
+    border-left:0;border-top:1px solid var(--line-strong);
+    border-radius:24px 24px 0 0;
+    transform:translateY(102%);
+    padding-top:0;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .panel.open{transform:translateY(0)}
+  .panel-grip{display:grid;place-items:center;padding:9px 0 3px;cursor:grab;touch-action:none}
+  .panel-grip span{width:42px;height:4px;border-radius:99px;background:rgba(255,255,255,.24)}
+  .panel-scroll{padding:14px 18px 30px}
+  .panel-title{font-size:19px}
+  .panel-orb{width:46px;height:46px;font-size:20px}
+  .hint{font-size:10.5px;padding:6px 11px;bottom:calc(10px + env(safe-area-inset-bottom,0px));white-space:normal;text-align:center;max-width:92vw}
+  .hint kbd{display:none}
+  .count-badge{display:none}
+  .list-view{padding-top:calc(var(--topbar-h) + 14px + env(safe-area-inset-top,0px))}
+  .list-grid{grid-template-columns:1fr}
+  .overlay{padding-top:calc(var(--topbar-h) + 10px)}
+  .search-card{max-height:min(80svh,720px)}
+}
+@media (max-height:520px) and (orientation:landscape){
+  .sun-label em{display:none}
+  .count-badge{display:none}
+}
+
+/* ── 접근성: 움직임 줄이기 ───────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  .nebula span{animation:none}
+}
+
+</style>
+</head>
+<body class="universe-mode">
+
+<noscript>
+  <div style="max-width:680px;margin:80px auto;padding:24px;font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;color:#eef2ff;line-height:1.7">
+    <h1 style="font-size:22px">정희정 · 꽃폈네</h1>
+    <p>이 지도는 자바스크립트가 필요합니다. 아래 링크로 바로 이동할 수 있습니다.</p>
+    <ul>
+      <li><a style="color:#ffd98a" href="https://link.inpock.co.kr/farmblossom">꽃폈네 허브</a></li>
+      <li><a style="color:#ffd98a" href="https://smartstore.naver.com/farmblossom">네이버 스마트스토어</a></li>
+      <li><a style="color:#ffd98a" href="https://heyzine.com/flip-book/33f82be42e.html">웹 플립북 《내 인생은 아직 상영 중》</a></li>
+      <li><a style="color:#ffd98a" href="https://www.youtube.com/shorts/X8ZRO3cFeQ4">개간 다큐 쇼츠</a></li>
+    </ul>
+  </div>
+</noscript>
+
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="nebula" aria-hidden="true">
+  <span class="nebula-a"></span>
+  <span class="nebula-b"></span>
+  <span class="nebula-c"></span>
+</div>
+
+<header class="topbar">
+  <a class="brand" href="#top" id="brandHome" aria-label="정희정 꽃폈네, 처음으로">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="26" height="26"><defs><radialGradient id="bg1"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#ffb347"/></radialGradient></defs><circle cx="50" cy="50" r="24" fill="url(#bg1)"/><ellipse cx="50" cy="50" rx="45" ry="16" fill="none" stroke="#78d6ff" stroke-width="3" opacity=".75" transform="rotate(-24 50 50)"/><circle cx="12" cy="38" r="5.5" fill="#ff8fb1"/></svg>
+    </span>
+    <span class="brand-text"><strong>정희정</strong><em>· 꽃폈네</em><span class="brand-sub">디지털 우주 지도</span></span>
+  </a>
+
+  <nav class="tools" aria-label="보기 도구">
+    <button class="pill" id="viewToggle" type="button" aria-pressed="false">
+      <span class="ico" aria-hidden="true" id="viewToggleIco">▦</span>
+      <span class="lbl" id="viewToggleLbl">평면으로 보기</span>
+    </button>
+    <button class="pill" id="searchBtn" type="button" aria-haspopup="dialog">
+      <span class="ico" aria-hidden="true">🔍</span>
+      <span class="lbl">전체 찾기</span>
+      <kbd>/</kbd>
+    </button>
+    <button class="pill pill-accent" id="qrBtn" type="button" aria-haspopup="dialog">
+      <span class="ico" aria-hidden="true">📱</span>
+      <span class="lbl">주소 QR</span>
+    </button>
+  </nav>
+</header>
+
+<main id="stage" class="stage" aria-label="우주 지도">
+  <div class="solar" id="solar">
+    <div class="orbits" id="orbits" aria-hidden="true"></div>
+
+    <button class="sun" id="sun" type="button" aria-label="정희정 소개 열기">
+      <span class="sun-corona" aria-hidden="true"></span>
+      <span class="sun-flare" aria-hidden="true"></span>
+      <span class="sun-core" aria-hidden="true"></span>
+      <span class="sun-label">
+        <strong>정희정 · 꽃폈네</strong>
+        <em>눌러서 소개 보기</em>
+      </span>
+    </button>
+
+    <div class="planet-layer" id="planets"></div>
+  </div>
+
+  <p class="hint" id="hint">
+    <span class="hint-dot" aria-hidden="true"></span>
+    행성을 눌러 자료를 펼쳐 보세요 <span class="hint-sep">·</span> <kbd>/</kbd> 로 검색
+  </p>
+  <div class="count-badge" id="countBadge" aria-live="polite"></div>
+</main>
+
+<section class="list-view" id="listView" hidden aria-label="평면 보기">
+  <div class="list-inner" id="listInner"></div>
+  <footer class="list-foot">
+    <p>자료를 고치거나 추가하려면 <code>data.js</code> 한 파일만 손보면 됩니다.</p>
+    <p class="dim">정희정 · 꽃폈네 · 2026</p>
+  </footer>
+</section>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="panel" id="panel" role="dialog" aria-modal="false" aria-labelledby="panelTitle" aria-hidden="true">
+  <div class="panel-grip" id="panelGrip" aria-hidden="true"><span></span></div>
+  <div class="panel-scroll" id="panelScroll"></div>
+</aside>
+
+<div class="overlay" id="searchOverlay" hidden>
+  <div class="overlay-bg" data-close="search"></div>
+  <div class="search-card" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+    <h2 class="sr-only" id="searchTitle">전체 찾기</h2>
+    <div class="search-field">
+      <span class="search-ico" aria-hidden="true">🔍</span>
+      <input id="searchInput" type="search" autocomplete="off" spellcheck="false"
+             placeholder="자료·키워드로 찾기 (예: 터틀, 감자, 플립북)" aria-label="검색어">
+      <button class="search-close" id="searchClose" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="search-meta" id="searchMeta">전체 자료 <b>0</b>개 · 행성 <b>5</b>개</div>
+    <div class="search-results" id="searchResults" role="listbox" aria-label="검색 결과"></div>
+  </div>
+</div>
+
+<div class="overlay" id="qrOverlay" hidden>
+  <div class="overlay-bg" data-close="qr"></div>
+  <div class="qr-card" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <button class="qr-close" id="qrClose" type="button" aria-label="닫기">✕</button>
+    <p class="qr-eyebrow">강연 · 수업 · 명함에</p>
+    <h2 id="qrTitle">이 지도 주소</h2>
+    <div class="qr-frame" id="qrFrame"><canvas id="qrCanvas" width="512" height="512" aria-label="지도 주소 QR 코드"></canvas></div>
+    <p class="qr-url" id="qrUrl"></p>
+    <div class="qr-actions">
+      <button class="btn btn-primary" id="qrCopy" type="button">주소 복사</button>
+      <button class="btn" id="qrSave" type="button">QR 이미지 저장</button>
+    </div>
+    <p class="qr-note">휴대폰 카메라로 QR을 비추면 바로 열립니다.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* QR 코드 생성 (외부 라이브러리 인라인) */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+</script>
+<script>
+/* ==================== DATA : 자료는 여기만 고치면 됩니다 ==================== */
+/* ==========================================================================
+   정희정 · 꽃폈네 디지털 우주 지도 — 자료실
+   --------------------------------------------------------------------------
+   여기(이 파일)만 고치면 지도, 평면 보기, 검색, QR까지 전부 함께 바뀝니다.
+   · 새 자료 추가  : planet.items 안에 { ... } 한 덩어리를 복사해 넣으면 끝
+   · 새 행성 추가  : planets 배열에 { ... } 한 덩어리를 추가 (orbit 1~3, angle 0~360)
+   · 글자 고치기   : 각 항목의 title / desc / meta / tags 만 수정
+   ========================================================================== */
+
+window.UNIVERSE = {
+  /* ── 가운데 태양 ─────────────────────────────────────────────── */
+  owner: {
+    name: '정희정',
+    brand: '꽃폈네',
+    handle: '@farmblossom',
+    tagline: '농사와 AI와 글, 그 사이를 오가며 사는 사람',
+    intro: [
+      '밀양 초동의 흙에서 ‘꽃폈네’를 짓고, 밀양여중에서 아이들과 로봇을 굴리고, 밤에는 책을 씁니다. 하나를 고르는 대신 전부 해 보는 쪽을 택했습니다.',
+      '택배부터 아동복, 치킨, 인테리어, 건축 관리자, 그리고 농사까지 — 실패를 몇 번 겪었지만 프로그램이 멈춘 적은 없습니다. 이 지도는 그렇게 쌓인 자료와 기록을 한자리에 모아 둔 개인 우주입니다.',
+      '행성을 누르면 그 영역의 자료가 열립니다. 평면 보기로 한눈에 보거나, 전체 찾기로 키워드 검색도 할 수 있습니다.'
+    ],
+    chips: ['청년창업농업인', '밀양여중 AI 코디네이터', '웹 플립북 크리에이터', '1인 출판 준비 중'],
+    links: [
+      { label: '꽃폈네 허브', url: 'https://link.inpock.co.kr/farmblossom' },
+      { label: '인스타그램', url: 'https://www.instagram.com/_farmblossom' },
+      { label: 'GitHub', url: 'https://github.com/farmblossom' }
+    ]
+  },
+
+  /* ── 궤도 위의 행성들 ───────────────────────────────────────── */
+  planets: [
+    /* ======================= 1. 꽃폈네 ======================= */
+    {
+      id: 'brand',
+      icon: '🌸',
+      name: '꽃폈네',
+      short: '꽃폈네',
+      subtitle: 'Farm Blossom · 브랜드 & 스토어',
+      accent: '#ff8fb1',
+      orbit: 1,
+      angle: 208,
+      summary: '자연이 키운 건강한 선물. 감자·고구마·들기름·제피, 그리고 스토리박스까지.',
+      items: [
+        {
+          title: '꽃폈네 브랜드 스토리',
+          meta: '브랜드',
+          desc: '밀양 초동의 흙에서 시작한 1인 농업 브랜드입니다. 자연이 키운 건강한 선물을 캐릭터 ‘퍼뜨기 & 쑤담이’와 함께 전합니다. 감자·고구마·들기름·제피에 제철 단감을 더할 준비를 하고 있고, 판매 채널은 스마트스토어와 인포크링크 허브로 이어집니다.',
+          tags: ['브랜드', '캐릭터', '퍼뜨기', '쑤담이'],
+          links: [
+            { label: '인포크링크 허브', url: 'https://link.inpock.co.kr/farmblossom', kind: 'hub' },
+            { label: '인스타그램 @_farmblossom', url: 'https://www.instagram.com/_farmblossom' }
+          ]
+        },
+        {
+          title: '네이버 스마트스토어',
+          meta: '스토어',
+          desc: '꽃폈네의 제철 산물을 만날 수 있는 공식 스토어입니다. 수확 시기에 맞춰 감자·고구마·들기름 등이 올라갑니다.',
+          tags: ['스마트스토어', '판매', '구매'],
+          links: [
+            { label: '스마트스토어 열기', url: 'https://smartstore.naver.com/farmblossom', kind: 'store' }
+          ]
+        },
+        {
+          title: '유튜브 쇼츠 · 개간 1탄',
+          meta: '영상 · 개간 기록',
+          desc: '“54평 아마존 밀림”이라 부르던 방치된 밭을 장비로 밀어붙인 날의 기록입니다. 덩굴과 나무를 걷어내며 땅의 높낮이를 처음 확인한 현장.',
+          tags: ['유튜브', '쇼츠', '개간', '영상'],
+          links: [
+            { label: '쇼츠 보기', url: 'https://www.youtube.com/shorts/X8ZRO3cFeQ4', kind: 'video' }
+          ]
+        },
+        {
+          title: '2027 구역별 작기·수익 밸런스 플랜',
+          meta: 'PDF · 2027 준비',
+          desc: '덕산리·신월리를 12개월 단위로 돌리는 2027년 작기 로테이션과 수익 밸런스 계획서입니다. 한 사람의 몸과 시간 안에서 농사가 한 바퀴 도는 그림을 목표로 잡았습니다.',
+          tags: ['2027', '작기', '계획', 'PDF', '농사'],
+          links: [
+            { label: 'PDF 바로 보기', url: 'https://drive.google.com/file/d/1IVmF6hvStMeSQqN0pZWgvMAazNIx6tva/view', kind: 'doc' },
+            { label: '드라이브 폴더', url: 'https://drive.google.com/drive/folders/1g53wuklxKIR3pY1poqli4tgipI7uZCuV', kind: 'folder' }
+          ]
+        },
+        {
+          title: '캐릭터 & 스토리박스',
+          meta: '패키지 디자인',
+          desc: '5kg 크라프트 일체형 조립상자에 스토리카드와 ‘기억하기 꽃폈네 감자칼’을 얹은 선물 구조입니다. 상자를 여는 순간이 브랜드의 첫 문장이 되도록 설계했습니다.',
+          tags: ['패키지', '굿즈', '스토리박스', '디자인'],
+          links: []
+        }
+      ]
+    },
+
+    /* =================== 2. AI 코디네이터 & 교육 =================== */
+    {
+      id: 'ai',
+      icon: '🤖',
+      name: 'AI 코디네이터 & 교육',
+      short: 'AI 교육',
+      subtitle: '밀양여중 · 평생학습',
+      accent: '#5fe0c8',
+      orbit: 2,
+      angle: 22,
+      summary: '아이들과 로봇을 굴리고, 선생님들과 구글 도구를 익히고, 어른들에게 AI를 옮겨 드립니다.',
+      items: [
+        {
+          title: '밀양여중 AI 동아리',
+          meta: '2026 · 중1~2 · 4팀 프로젝트 수업',
+          desc: '피지컬(햄스터봇S)·영상·퀴즈·터틀 4팀으로 나눠 2인 1조 PM 방식으로 굴러갑니다. 가르치는 수업이 아니라 팀별로 만들어 마지막에 1분씩 쇼케이스하는 수업으로 설계했습니다.',
+          tags: ['동아리', '밀양여중', '로봇', '프로젝트 수업'],
+          links: []
+        },
+        {
+          title: '터틀로봇 4단계 빌드업 수업',
+          meta: '슬라이드 11장 · 발표자 노트 7,685자',
+          desc: 'Step 0 하드웨어 탐색 → Step 1 자율 모드 3종 → Step 2 카드 코딩 24종 → Step 3 라인 코딩·마을 트랙 미션 → Step 4 멘토링 꿀팁까지, 처음 만지는 아이도 한 시간 안에 주행까지 갈 수 있게 단계를 세웠습니다.',
+          tags: ['터틀', '로보메이션', '수업자료', '라인코딩'],
+          links: []
+        },
+        {
+          title: '로봇 4종 스테이션 수업',
+          meta: '터틀 · 햄스터봇S · 로보까무 · 핑퐁로봇',
+          desc: '교사 한 명의 목소리를 아끼는 모둠 순환제입니다. 4대 스테이션을 돌며 로봇마다 다른 미션을 수행하고, 로보까무는 전소연 〈퇴사할게여〉에 맞춰 상체 모션만으로 춤을 춥니다.',
+          tags: ['햄스터봇', '로보까무', '핑퐁로봇', '수업계획서'],
+          links: []
+        },
+        {
+          title: '마이크로비트 교안 · 밀양여중 맞춤 리디자인',
+          meta: '슬라이드 89장',
+          desc: '영의 쌤이 검증해 온 89장 교안의 순서와 호흡은 그대로 두고, 꾸럼e 4곳을 브라우저 MakeCode로 바꾸고 표지 학교명과 패들렛 안내만 밀양여중에 맞게 교체했습니다.',
+          tags: ['마이크로비트', 'MakeCode', '교안', '리디자인'],
+          links: []
+        },
+        {
+          title: '‘12월의 선물’ 터틀로봇 코딩 놀이터',
+          meta: '2026.12.05 · 밀양 우리지역아동센터 · 120분',
+          desc: 'AI동아리 아이들이 초등·유아 동생들에게 직접 알려주는 찾아가는 멘토링입니다. 오프닝 → 터틀 피아노 음악회 → 다과 → 라인트레이싱 종이컵 계주 → 수료식 순서로, 운영계획서·결재 기안문·참가 신청서·세부 교육계획안까지 갖췄습니다.',
+          tags: ['멘토링', '지역아동센터', '터틀', '12월'],
+          links: []
+        },
+        {
+          title: '2027 밀양시 평생학습관 강사 트랙',
+          meta: '2개 강좌 · 강의계획서 완비',
+          desc: '「중장년을 위한 똑똑한 스마트폰 생활 AI & 캔바 교실」과 「스마트폰에 비서 한 명 두기: 나만의 맞춤형 AI 비서 만들기」 두 강좌입니다. 수강생 부담 0원 원칙으로, 잘 짠 프롬프트면 무료 도구만으로 충분하다는 데서 출발했습니다.',
+          tags: ['평생학습', '강의', '중장년', 'AI 비서'],
+          links: []
+        },
+        {
+          title: '2026 경남교육청 디지털튜터 양성과정',
+          meta: '오프라인 실습 6회차 · 25차시',
+          desc: '토요일 오프라인 실습과 온라인 110차시로 구성된 과정입니다. 진주교대 전산실에서의 실습과 동료 강사 4명과의 카풀, 그 사이 이어진 스터디 자리까지가 하나의 기록입니다.',
+          tags: ['디지털튜터', '교육청', '연수'],
+          links: []
+        },
+        {
+          title: '경남CKL 구글 공인 교육자 Level 1 스터디',
+          meta: '6인 스터디 · 4주',
+          desc: '드라이브·문서, 클래스룸, 캘린더·Gmail, 사이트·유튜브, Meet·Keep까지 도구를 나눠 10분씩 실습 발표로 정리하는 스터디입니다. 시험은 100% 오픈북, 80점 합격.',
+          tags: ['구글', 'CKL', '스터디', 'Level 1'],
+          links: []
+        },
+        {
+          title: '캔바 무드보드 & 굿즈 수업',
+          meta: '4팀 비전보드 · 학교 계정 세팅',
+          desc: '교사용 캔바 계정에 ‘밀양여중 AI 동아리’ 폴더와 4팀 무드보드를 만들어 팀별 편집 링크로 배포했습니다. 캐릭터·굿즈 지도안과 축제 퀴즈 수업 패키지도 이 계정 위에서 돌아갑니다.',
+          tags: ['캔바', '무드보드', '디자인 수업'],
+          links: []
+        }
+      ]
+    },
+
+    /* ======================= 3. 출판 & 플립북 ======================= */
+    {
+      id: 'book',
+      icon: '📖',
+      name: '출판 & 웹 플립북',
+      short: '출판',
+      subtitle: '포토북 · 자전 에세이',
+      accent: '#ffc857',
+      orbit: 2,
+      angle: 145,
+      summary: '사진으로 한 권을 엮고, 이제는 글로 한 권을 쓰고 있습니다.',
+      items: [
+        {
+          title: '웹 플립북 《내 인생은 아직 상영 중》',
+          meta: '24쪽 · 발행인 정희정 · 발행처 꽃폈네',
+          desc: '나의 화양연화를 담은 자전적 포토북입니다. 실물 사진을 1:1 수채화로 옮겨 24쪽 전체의 화풍을 통일했고, 마무리는 “나의 화양연화는 지금도 계속된다”. 웹에서 바로 넘겨 볼 수 있습니다.',
+          tags: ['플립북', '포토북', 'Heyzine', '수채화'],
+          links: [
+            { label: '플립북 열기', url: 'https://heyzine.com/flip-book/33f82be42e.html', kind: 'book' }
+          ]
+        },
+        {
+          title: '《AI도 기가 차 하는 나란 사람》',
+          meta: '자전 에세이 · 집필 중 · 14개 목차 확정, 1장 탈고',
+          desc: '망한 적은 있어도 끝난 적은 없다 — 굴속인 줄 알았는데 터널이었다는 문장에서 시작한 단독 자전 에세이입니다. 프롤로그와 에필로그까지 14개 꼭지를 확정하고 1장을 탈고했습니다.',
+          details: [
+            '프롤로그 · AI도 나를 분석하다가 기가 찼다',
+            '1장 · 나는 왜 가만히 있으면 불안하지?',
+            '2장 · 직업이 몇 개냐고? 나도 세어봐야 해',
+            '3장 · 사장님, 매출이랑 순이익은 다릅니다',
+            '4장 · 넌 노가다야, 임마!',
+            '5장 · 적토마는 많이 필요 없더라',
+            '6장 · 니 펜 찾으러 와라',
+            '7장 · 갑을병정 중에 정',
+            '8장 · 논은 논이었다',
+            '9장 · 감자는 됐는데 고구마는 개망함',
+            '10장 · 내 인생은 왜 자꾸 프로젝트가 되지?',
+            '11장 · J라는 큰 계획을 위해 무한 P로 산다',
+            '12장 · 성공하면 쓰려던 책을 먼저 썼다',
+            '에필로그 · 아직 종료 버튼은 안 눌렀습니다'
+          ],
+          tags: ['에세이', '집필', '출판', '목차'],
+          links: []
+        },
+        {
+          title: '포토북 기획 노트',
+          meta: '1차시 기획 · 주제와 독자',
+          desc: '성공한 농부 이야기보다 새로운 일에 계속 도전하는 사람의 이야기를 쓰고 싶었습니다. 노트북, 밭일, 야간 장터, 꽃폈네 부스 — 재료는 전부 실제 농장의 하루였습니다.',
+          tags: ['기획', '포토북', '글쓰기'],
+          links: []
+        }
+      ]
+    },
+
+    /* ======================= 4. 영농 현장 ======================= */
+    {
+      id: 'farm',
+      icon: '🚜',
+      name: '영농 현장 & 개간',
+      short: '영농 현장',
+      subtitle: '신월리 98번지 · 덕산리 585평',
+      accent: '#8ee06a',
+      orbit: 3,
+      angle: 252,
+      summary: '버려져 있던 땅을 깎고 고르고 씨를 뿌린 기록. 숫자와 사진으로 남깁니다.',
+      items: [
+        {
+          title: '신월리 98번지 · 541평 개간 완공',
+          meta: '2026.11 · 계획관리지역',
+          desc: '03 굴착기 이틀 공정으로 배수로·상부 도로·평탄화를 끝내고 1톤 트럭 유턴 공간까지 만들었습니다. 자생 팽나무와 제피나무는 살리고, 발근한 왕칡은 스토리박스 원물로 방향을 바꿨습니다. LX 지적경계복원측량에서도 경계 침범 0%를 확인했습니다.',
+          tags: ['개간', '신월리', '굴착기', '측량', '호밀'],
+          links: []
+        },
+        {
+          title: '덕산리 585평 · 2027 감자 → 들깨 2모작',
+          meta: '조풍 감자 + 다유 들깨',
+          desc: '고구마밭을 로터리로 갈아엎고 토양살충제와 함께 호밀을 파종해 두 밭 모두 겨울 준비를 마쳤습니다. 2027년은 극조생 조풍 감자(80~85일)로 장마 전에 수확하고, 후작으로 들깨를 붙이는 2모작이 가닥입니다.',
+          tags: ['덕산리', '감자', '들깨', '2모작', '조풍'],
+          links: []
+        },
+        {
+          title: '개간 다큐 쇼츠',
+          meta: '영상 기록',
+          desc: '“오늘은 기농전 보너 모먼트 종합 예술하는 날” — 장비를 불러 직접 작업을 지시한 현장이 쇼츠로 남아 있습니다. 굴착기 사령관 모드의 하루.',
+          tags: ['쇼츠', '개간', '현장', '영상'],
+          links: [
+            { label: '쇼츠 보기', url: 'https://www.youtube.com/shorts/X8ZRO3cFeQ4', kind: 'video' }
+          ]
+        },
+        {
+          title: '2027 구역별 작기·수익 플랜',
+          meta: 'PDF · 12개월 로드맵',
+          desc: '노동력과 수확 시기가 겹치지 않도록 구역을 나눠 짠 2027년 계획서입니다. 저장시설이 없다는 조건을 전제로, 저장이 필요한 작목은 조기 출하·가공으로 우회하는 설계를 담았습니다.',
+          tags: ['2027', '계획', 'PDF', '작기'],
+          links: [
+            { label: 'PDF 바로 보기', url: 'https://drive.google.com/file/d/1IVmF6hvStMeSQqN0pZWgvMAazNIx6tva/view', kind: 'doc' }
+          ]
+        },
+        {
+          title: '응달 구역 · 다래와 어수리',
+          meta: '수익화 실험',
+          desc: '신월리 동쪽 응달 구역은 다래를 심고 아래쪽에 어수리 같은 산채를 얹어, 나무가 자라는 동안에도 소득이 나오는 구조를 검토하고 있습니다.',
+          tags: ['다래', '어수리', '산채', '수익화'],
+          links: []
+        }
+      ]
+    },
+
+    /* ==================== 5. AI 도구 & 바이브코딩 ==================== */
+    {
+      id: 'tools',
+      icon: '🛠️',
+      name: 'AI 도구 & 바이브코딩',
+      short: 'AI 도구',
+      subtitle: '직접 만든 웹앱과 자료',
+      accent: '#8fb8ff',
+      orbit: 3,
+      angle: 68,
+      summary: '필요하면 만들어 씁니다. 수업 도구도, 배치 앱도, 이 지도도 직접.',
+      items: [
+        {
+          title: '패들렛 288개 AI 도구 아카이브 복원',
+          meta: '27개 섹션 · 카드 288 · 첨부 35종',
+          desc: '복제가 막힌 강사 보드를 1:1로 되살린 작업입니다. 카드 288개와 첨부파일 35종을 5차에 걸쳐 옮기고, API 전수 검증으로 누락 0건·MD5 해시 일치까지 확인했습니다.',
+          tags: ['패들렛', '아카이브', '복원', 'AI 도구'],
+          links: []
+        },
+        {
+          title: '방 배치 앱 · arrangeroom',
+          meta: '바이브코딩 · GitHub Pages',
+          desc: '방 배치를 하기 위한 웹앱입니다. 필요한 기능을 말로 정리해 바로 화면으로 확인하는 방식으로 만들었고, 지금도 인터넷에 올라가 있습니다.',
+          tags: ['바이브코딩', '웹앱', 'GitHub Pages'],
+          links: [
+            { label: '앱 열기', url: 'https://farmblossom.github.io/arrangeroom/', kind: 'app' }
+          ]
+        },
+        {
+          title: '다이룸플러스 바이브코딩 웹앱',
+          meta: '프로젝트',
+          desc: '현장에서 바로 쓸 도구를 대화로 설계해 앱으로 올리는 프로젝트입니다. 기획서를 쓰고 개발을 의뢰하는 대신, 필요한 순간에 직접 만들어 쓰는 쪽을 연습하고 있습니다.',
+          tags: ['바이브코딩', '웹앱', '프로젝트'],
+          links: []
+        },
+        {
+          title: '터틀 활동지 웹앱',
+          meta: 'Google Sheets + Apps Script',
+          desc: '학생이 활동을 마치면 시트 응답DB에 기록이 쌓이고, 완료 팝업에서 패들렛으로 넘어가는 구조입니다. 터틀 실물 사진 5종을 넣어 교실에서 바로 쓸 수 있게 했습니다.',
+          tags: ['웹앱', 'Apps Script', '수업 도구', '터틀'],
+          links: []
+        },
+        {
+          title: 'AI 동아리 수업 대시보드',
+          meta: '단일 HTML',
+          desc: '미션 타이머, 카멜레온 피아노 시뮬레이터, 5색 라인코딩 신호등, 영상팀 컷 체크리스트, 발표 추첨 룰렛을 한 화면에 모았습니다. 수업 중 창을 오갈 필요를 없애는 것이 목적이었습니다.',
+          tags: ['HTML', '수업 도구', '대시보드'],
+          links: []
+        },
+        {
+          title: '정희정 · 꽃폈네 디지털 우주 지도',
+          meta: '지금 이 페이지',
+          desc: '자료가 흩어져 있으면 결국 안 열게 된다는 생각에서 만든 개인 지식 지도입니다. 순수 HTML·CSS·JavaScript로만 만들었고, 자료는 data.js 한 파일에서 관리합니다.',
+          tags: ['우주 지도', '포트폴리오', 'GitHub Pages'],
+          links: [
+            { label: 'GitHub 저장소', url: 'https://github.com/farmblossom/farmblossom.github.io', kind: 'code' }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+</script>
+<script>
+/* ==========================================================================
+   정희정 · 꽃폈네 디지털 우주 지도  —  app.js
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var DATA = window.UNIVERSE;
+  if (!DATA || !DATA.planets) return;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var stage = $('#stage');
+  var solar = $('#solar');
+  var planetLayer = $('#planets');
+  var orbitLayer = $('#orbits');
+  var panel = $('#panel');
+  var panelScroll = $('#panelScroll');
+  var panelGrip = $('#panelGrip');
+  var scrim = $('#scrim');
+  var listView = $('#listView');
+  var listInner = $('#listInner');
+  var searchOverlay = $('#searchOverlay');
+  var searchInput = $('#searchInput');
+  var searchResults = $('#searchResults');
+  var searchMeta = $('#searchMeta');
+  var qrOverlay = $('#qrOverlay');
+  var qrCanvas = $('#qrCanvas');
+  var toastEl = $('#toast');
+
+  var PLANETS = DATA.planets;
+  var TOTAL_ITEMS = PLANETS.reduce(function (n, p) { return n + p.items.length; }, 0);
+
+  /* ── helpers ─────────────────────────────────────────────── */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function highlight(text, q) {
+    var safe = esc(text);
+    if (!q) return safe;
+    var needle = esc(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    try {
+      return safe.replace(new RegExp('(' + needle + ')', 'gi'), '<mark>$1</mark>');
+    } catch (e) { return safe; }
+  }
+  function planetById(id) {
+    for (var i = 0; i < PLANETS.length; i++) if (PLANETS[i].id === id) return PLANETS[i];
+    return null;
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2100);
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; })
+        .catch(function () { return fallbackCopy(text); });
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  /* ── 별밭(canvas) ────────────────────────────────────────── */
+  var canvas = $('#stars');
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  var cw = 0, ch = 0, dpr = 1;
+  var shoot = null;
+  var nextShootAt = 4000;
+  var pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+
+  function sizeStars() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = window.innerWidth;
+    ch = window.innerHeight;
+    canvas.width = Math.round(cw * dpr);
+    canvas.height = Math.round(ch * dpr);
+    canvas.style.width = cw + 'px';
+    canvas.style.height = ch + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var count = Math.round(clamp((cw * ch) / 8200, 90, 260));
+    stars = [];
+    for (var i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * cw,
+        y: Math.random() * ch,
+        r: Math.random() * 1.15 + 0.3,
+        a: Math.random() * 0.45 + 0.25,
+        sp: Math.random() * 1.1 + 0.35,
+        ph: Math.random() * Math.PI * 2,
+        depth: Math.random() * 0.8 + 0.2,
+        tint: Math.random() < 0.1 ? 'warm' : (Math.random() < 0.18 ? 'cool' : 'plain')
+      });
+    }
+  }
+
+  function drawStars(now) {
+    ctx.clearRect(0, 0, cw, ch);
+    pointer.x += (pointer.tx - pointer.x) * 0.06;
+    pointer.y += (pointer.ty - pointer.y) * 0.06;
+
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      var tw = reduceMotion ? 1 : (0.72 + 0.28 * Math.sin(now * 0.001 * s.sp + s.ph));
+      var alpha = clamp(s.a * tw, 0.05, 0.95);
+      var x = s.x + pointer.x * s.depth * 16;
+      var y = s.y + pointer.y * s.depth * 16;
+      var color = s.tint === 'warm' ? '255,226,170' : s.tint === 'cool' ? '175,215,255' : '235,242,255';
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(' + color + ',' + alpha + ')';
+      ctx.arc(x, y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      if (s.r > 1.15) {
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(' + color + ',' + (alpha * 0.14) + ')';
+        ctx.arc(x, y, s.r * 3.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    /* 슈팅스타 */
+    if (!reduceMotion) {
+      if (!shoot && now > nextShootAt) {
+        var fromLeft = Math.random() > 0.5;
+        shoot = {
+          x: fromLeft ? -40 : cw + 40,
+          y: Math.random() * ch * 0.55,
+          vx: (fromLeft ? 1 : -1) * (5.5 + Math.random() * 3),
+          vy: 2.2 + Math.random() * 1.6,
+          life: 0,
+          max: 70 + Math.random() * 30
+        };
+      }
+      if (shoot) {
+        shoot.x += shoot.vx;
+        shoot.y += shoot.vy;
+        shoot.life++;
+        var p = 1 - shoot.life / shoot.max;
+        if (p <= 0) {
+          shoot = null;
+          nextShootAt = now + 7000 + Math.random() * 9000;
+        } else {
+          var len = 90;
+          var grad = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx * (len / 6), shoot.y - shoot.vy * (len / 6));
+          grad.addColorStop(0, 'rgba(255,255,255,' + (0.85 * p) + ')');
+          grad.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(shoot.x, shoot.y);
+          ctx.lineTo(shoot.x - shoot.vx * (len / 6), shoot.y - shoot.vy * (len / 6));
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  /* ── 태양계 배치 ─────────────────────────────────────────── */
+  var RING = [
+    { k: 0.47, speed: 0.85, size: 0.25 },
+    { k: 0.72, speed: 0.6, size: 0.225 },
+    { k: 0.96, speed: 0.44, size: 0.20 }
+  ];
+  var nodes = [];        // {el, planet, size}
+  var geom = { cx: 0, cy: 0, ryFactor: 1, R: 0 };
+  var elapsed = 0;
+
+  function buildPlanets() {
+    orbitLayer.innerHTML = '';
+    planetLayer.innerHTML = '';
+    nodes = [];
+
+    for (var r = 0; r < RING.length; r++) {
+      var ring = document.createElement('div');
+      ring.className = 'orbit' + (r === 1 ? ' is-dashed' : '');
+      ring.dataset.ring = String(r);
+      orbitLayer.appendChild(ring);
+    }
+
+    PLANETS.forEach(function (p, idx) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'planet pulse';
+      btn.dataset.id = p.id;
+      btn.style.setProperty('--c', p.accent);
+      btn.setAttribute('aria-label', p.name + ' — 자료 ' + p.items.length + '개 열기');
+      btn.innerHTML =
+        '<span class="planet-ring" aria-hidden="true"></span>' +
+        '<span class="planet-body"><span class="planet-ico" aria-hidden="true">' + p.icon + '</span></span>' +
+        '<span class="planet-name">' + esc(p.name) + '</span>' +
+        '<span class="planet-count">자료 ' + p.items.length + '</span>';
+      btn.addEventListener('click', function () { togglePlanet(p.id); });
+      btn.addEventListener('mouseenter', function () { hoverPlanet = true; });
+      btn.addEventListener('mouseleave', function () { hoverPlanet = false; });
+      btn.addEventListener('focus', function () { hoverPlanet = true; });
+      btn.addEventListener('blur', function () { hoverPlanet = false; });
+      planetLayer.appendChild(btn);
+      nodes.push({ el: btn, planet: p, ring: clamp((p.orbit || 1) - 1, 0, 2), idx: idx });
+    });
+
+    setTimeout(function () {
+      nodes.forEach(function (n) { n.el.classList.remove('pulse'); });
+    }, 5200);
+  }
+
+  function layoutSolar() {
+    var W = solar.clientWidth;
+    var H = solar.clientHeight;
+    if (!W || !H) return;
+
+    geom.cx = W / 2;
+    geom.cy = H / 2;
+    geom.R = Math.min(W * 0.455, H * 0.405);
+    geom.ryFactor = clamp((H / W) * 0.54, 0.72, 1.2);
+
+    var sunSize = clamp(geom.R * 0.30, 72, 152);
+    solar.style.setProperty('--sun', sunSize + 'px');
+
+    var labelSize = clamp(geom.R * 0.040, 10, 13);
+
+    nodes.forEach(function (n) {
+      var ringCfg = RING[n.ring];
+      var size = clamp(geom.R * ringCfg.size, 42, 96);
+      n.el.style.width = size + 'px';
+      n.el.style.height = size + 'px';
+      n.el.style.setProperty('--size', size + 'px');
+      n.el.style.setProperty('--label', labelSize + 'px');
+      n.size = size;
+      var nameEl = n.el.querySelector('.planet-name');
+      if (nameEl) nameEl.textContent = (window.innerWidth < 560 && n.planet.short) ? n.planet.short : n.planet.name;
+    });
+
+    /* 궤도 링 크기 */
+    $$('.orbit', orbitLayer).forEach(function (ring, i) {
+      var rr = geom.R * RING[i].k;
+      var ry = rr * geom.ryFactor;
+      ring.style.width = (rr * 2) + 'px';
+      ring.style.height = (ry * 2) + 'px';
+    });
+
+    positionPlanets();
+  }
+
+  function positionPlanets(animate) {
+    nodes.forEach(function (n) {
+      var ringCfg = RING[n.ring];
+      var rr = geom.R * ringCfg.k;
+      var ry = rr * geom.ryFactor;
+      var deg = n.planet.angle + (reduceMotion ? 0 : elapsed * ringCfg.speed);
+      var rad = (deg * Math.PI) / 180;
+      var x = rr * Math.cos(rad);
+      var y = ry * Math.sin(rad);
+      n.el.style.left = '50%';
+      n.el.style.top = '50%';
+      n.el.style.transform = 'translate(-50%,-50%) translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px)';
+      /* 화면 밖으로 나간 행성은 살짝 흐리게 */
+      var outside = Math.abs(x) > geom.cx - n.size * 0.4 || Math.abs(y) > geom.cy - n.size * 0.4;
+      n.el.classList.toggle('is-offscreen', outside);
+    });
+  }
+
+  /* ── 애니메이션 루프 ─────────────────────────────────────── */
+  var hoverPlanet = false;
+  var lastT = 0;
+  function paused() {
+    return reduceMotion || panel.classList.contains('open') || !listView.hidden ||
+      !searchOverlay.hidden || !qrOverlay.hidden || document.hidden || hoverPlanet;
+  }
+  function frame(now) {
+    if (!lastT) lastT = now;
+    var dt = Math.min(64, now - lastT);
+    lastT = now;
+    if (!paused()) {
+      elapsed += dt / 1000;
+      positionPlanets();
+    }
+    drawStars(now);
+    requestAnimationFrame(frame);
+  }
+
+  /* ── 패널 ────────────────────────────────────────────────── */
+  var currentId = null;
+  var lastFocus = null;
+
+  function linksHTML(item) {
+    if (!item.links || !item.links.length) return '';
+    return '<div class="item-links">' + item.links.map(function (l) {
+      return '<a class="link-btn" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' + esc(l.label) + '</a>';
+    }).join('') + '</div>';
+  }
+
+  function detailsHTML(item) {
+    if (!item.details || !item.details.length) return '';
+    return '<details class="item-details"><summary>' + esc(item.detailsLabel || '목차 ' + item.details.length + '개 보기') + '</summary>' +
+      '<ol>' + item.details.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ol></details>';
+  }
+
+  function itemHTML(item) {
+    var tags = (item.tags && item.tags.length)
+      ? '<ul class="item-tags">' + item.tags.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>'
+      : '';
+    return '<article class="item">' +
+      (item.meta ? '<span class="item-meta">' + esc(item.meta) + '</span>' : '') +
+      '<h3 class="item-title">' + esc(item.title) + '</h3>' +
+      '<p class="item-desc">' + esc(item.desc) + '</p>' +
+      tags + detailsHTML(item) + linksHTML(item) +
+      '</article>';
+  }
+
+  function renderPlanetPanel(p) {
+    var head =
+      '<div class="panel-head">' +
+        '<div class="panel-orb" aria-hidden="true">' + p.icon + '</div>' +
+        '<div class="panel-id">' +
+          '<p class="panel-sub">' + esc(p.subtitle) + '</p>' +
+          '<h2 class="panel-title" id="panelTitle">' + esc(p.name) + '</h2>' +
+        '</div>' +
+        '<button class="panel-close" id="panelClose" type="button" aria-label="닫기">✕</button>' +
+      '</div>' +
+      '<p class="panel-summary">' + esc(p.summary) + '</p>' +
+      '<div class="panel-list">' + p.items.map(itemHTML).join('') + '</div>' +
+      '<p class="panel-foot">자료 ' + p.items.length + '개 · 꽃폈네 디지털 우주 지도</p>';
+
+    panelScroll.innerHTML = head;
+    panelScroll.scrollTop = 0;
+    panel.style.setProperty('--c', p.accent);
+
+    var closeBtn = $('#panelClose', panelScroll);
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+  }
+
+  function renderAboutPanel() {
+    var o = DATA.owner;
+    var head =
+      '<div class="panel-head">' +
+        '<div class="panel-orb" aria-hidden="true" style="font-size:22px">🌼</div>' +
+        '<div class="panel-id">' +
+          '<p class="panel-sub">꽃폈네 · ' + esc(o.handle) + '</p>' +
+          '<h2 class="panel-title" id="panelTitle">' + esc(o.name) + '</h2>' +
+        '</div>' +
+        '<button class="panel-close" id="panelClose" type="button" aria-label="닫기">✕</button>' +
+      '</div>' +
+      '<p class="panel-summary">' + esc(o.tagline) + '</p>' +
+      '<ul class="about-chips">' + o.chips.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul>' +
+      '<div class="about-body">' + o.intro.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' +
+      '<div class="about-links">' + o.links.map(function (l) {
+        return '<a class="link-btn" href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' + esc(l.label) + '</a>';
+      }).join('') + '</div>' +
+      '<p class="panel-foot">자료 ' + TOTAL_ITEMS + '개 · 행성 ' + PLANETS.length + '개</p>';
+
+    panelScroll.innerHTML = head;
+    panelScroll.scrollTop = 0;
+    panel.style.setProperty('--c', '#ffc857');
+    var closeBtn = $('#panelClose', panelScroll);
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+  }
+
+  function openPanel() {
+    lastFocus = document.activeElement;
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    if (window.matchMedia('(max-width: 820px)').matches) {
+      scrim.hidden = false;
+      requestAnimationFrame(function () { scrim.classList.add('show'); });
+    }
+    setTimeout(function () {
+      var c = $('#panelClose', panelScroll);
+      if (c && window.innerWidth > 820) c.focus({ preventScroll: true });
+    }, 120);
+  }
+
+  function closePanel() {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    scrim.classList.remove('show');
+    setTimeout(function () { if (!scrim.classList.contains('show')) scrim.hidden = true; }, 320);
+    nodes.forEach(function (n) { n.el.classList.remove('is-active'); });
+    currentId = null;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (lastFocus && lastFocus.focus) {
+      try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+    }
+  }
+
+  function setActive(id) {
+    nodes.forEach(function (n) {
+      n.el.classList.toggle('is-active', n.planet.id === id);
+      n.el.classList.toggle('is-dim', !!id && n.planet.id !== id);
+    });
+  }
+
+  function openPlanet(id, opts) {
+    var p = planetById(id);
+    if (!p) return;
+    currentId = id;
+    renderPlanetPanel(p);
+    openPanel();
+    setActive(id);
+    if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+    if (opts && opts.focusItem != null) {
+      setTimeout(function () {
+        var arts = $$('.item', panelScroll);
+        var el = arts[opts.focusItem];
+        if (el) {
+          el.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+          el.classList.add('flash');
+          setTimeout(function () { el.classList.remove('flash'); }, 1600);
+        }
+      }, 260);
+    }
+  }
+
+  function openAbout() {
+    currentId = 'about';
+    renderAboutPanel();
+    openPanel();
+    setActive(null);
+    if (location.hash !== '#about') history.replaceState(null, '', '#about');
+  }
+
+  function togglePlanet(id) {
+    if (currentId === id && panel.classList.contains('open')) closePanel();
+    else openPlanet(id);
+  }
+
+  /* ── 태양 · 닫기 버튼 배선 ───────────────────────────────── */
+  $('#sun').addEventListener('click', function () {
+    if (currentId === 'about' && panel.classList.contains('open')) closePanel();
+    else openAbout();
+  });
+  scrim.addEventListener('click', closePanel);
+
+  /* 모바일: 아래로 끌어 닫기 */
+  (function () {
+    var startY = null, dy = 0;
+    panelGrip.addEventListener('pointerdown', function (e) {
+      startY = e.clientY;
+      dy = 0;
+      panel.style.transition = 'none';
+      panelGrip.setPointerCapture(e.pointerId);
+    });
+    panelGrip.addEventListener('pointermove', function (e) {
+      if (startY == null) return;
+      dy = Math.max(0, e.clientY - startY);
+      panel.style.transform = 'translateY(' + dy + 'px)';
+    });
+    function end() {
+      if (startY == null) return;
+      panel.style.transition = '';
+      panel.style.transform = '';
+      startY = null;
+      if (dy > 90) closePanel();
+    }
+    panelGrip.addEventListener('pointerup', end);
+    panelGrip.addEventListener('pointercancel', end);
+  })();
+
+  /* ── 평면 보기 ───────────────────────────────────────────── */
+  function listHTML() {
+    var head = '<div class="list-head">' +
+      '<h1>한눈에 보는 자료실</h1>' +
+      '<p>' + esc(DATA.owner.name) + ' · ' + esc(DATA.owner.brand) + ' — 행성 ' + PLANETS.length +
+      '개, 자료 ' + TOTAL_ITEMS + '개. 카드의 링크를 눌러 바로 열 수 있습니다.</p>' +
+      '</div>';
+
+    var body = PLANETS.map(function (p) {
+      return '<section class="list-group" id="list-' + esc(p.id) + '" style="--c:' + p.accent + '">' +
+        '<div class="list-group-head">' +
+          '<div class="list-group-orb" aria-hidden="true">' + p.icon + '</div>' +
+          '<div>' +
+            '<h2 class="list-group-title">' + esc(p.name) + '</h2>' +
+            '<p class="list-group-sub">' + esc(p.subtitle) + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<p class="list-group-sum" style="margin:-6px 0 14px">' + esc(p.summary) + '</p>' +
+        '<div class="list-grid">' + p.items.map(itemHTML).join('') + '</div>' +
+        '</section>';
+    }).join('');
+
+    return head + body;
+  }
+
+  function renderList() {
+    if (!listInner.dataset.ready) {
+      listInner.innerHTML = listHTML();
+      listInner.dataset.ready = '1';
+    }
+  }
+
+  function setListMode(on, remember) {
+    renderList();
+    listView.hidden = !on;
+    document.body.classList.toggle('list-open', on);
+    var btn = $('#viewToggle');
+    var ico = $('#viewToggleIco');
+    var lbl = $('#viewToggleLbl');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    ico.textContent = on ? '🪐' : '▦';
+    lbl.textContent = on ? '우주로 보기' : '평면으로 보기';
+    if (on) {
+      closePanel();
+      listView.scrollTop = 0;
+    }
+    if (remember !== false) {
+      try { localStorage.setItem('kpu-view', on ? 'list' : 'universe'); } catch (e) {}
+    }
+  }
+
+  $('#viewToggle').addEventListener('click', function () {
+    setListMode(listView.hidden, true);
+  });
+
+  /* ── 검색 ───────────────────────────────────────────────── */
+  var INDEX = [];
+  PLANETS.forEach(function (p) {
+    p.items.forEach(function (it, i) {
+      INDEX.push({
+        planet: p,
+        order: i,
+        title: it.title,
+        desc: it.desc,
+        meta: it.meta || '',
+        tags: (it.tags || []).join(' '),
+        links: (it.links || []).map(function (l) { return l.label; }).join(' ')
+      });
+    });
+  });
+
+  var searchActive = -1;
+
+  function score(entry, q) {
+    var t = entry.title.toLowerCase();
+    var tag = entry.tags.toLowerCase();
+    var meta = entry.meta.toLowerCase();
+    var d = entry.desc.toLowerCase();
+    if (t === q) return 100;
+    if (t.indexOf(q) === 0) return 90;
+    if (t.indexOf(q) > -1) return 80;
+    if (tag.indexOf(q) > -1) return 60;
+    if (meta.indexOf(q) > -1) return 50;
+    if (d.indexOf(q) > -1) return 30;
+    if (entry.planet.name.toLowerCase().indexOf(q) > -1) return 20;
+    return 0;
+  }
+
+  function runSearch(raw) {
+    var q = raw.trim().toLowerCase();
+    searchActive = -1;
+    if (!q) {
+      searchMeta.innerHTML = '전체 자료 <b>' + TOTAL_ITEMS + '</b>개 · 행성 <b>' + PLANETS.length + '</b>개';
+      searchResults.innerHTML =
+        '<div class="search-chips">' + PLANETS.map(function (p) {
+          return '<button type="button" data-cat="' + esc(p.id) + '">' + p.icon + ' ' + esc(p.name) + '</button>';
+        }).join('') + '</div>' +
+        '<div class="search-hint"><span><kbd>↑</kbd><kbd>↓</kbd> 이동</span><span><kbd>Enter</kbd> 열기</span><span><kbd>Esc</kbd> 닫기</span></div>';
+      $$('.search-chips button', searchResults).forEach(function (b) {
+        b.addEventListener('click', function () {
+          closeSearch();
+          openPlanet(b.dataset.cat);
+        });
+      });
+      return;
+    }
+
+    var hits = INDEX.map(function (e) { return { e: e, s: score(e, q) }; })
+      .filter(function (h) { return h.s > 0; })
+      .sort(function (a, b) { return b.s - a.s; });
+
+    searchMeta.innerHTML = '‘' + esc(raw.trim()) + '’ 검색 결과 <b>' + hits.length + '</b>개';
+
+    if (!hits.length) {
+      searchResults.innerHTML = '<div class="search-empty">‘' + esc(raw.trim()) + '’에 맞는 자료가 없습니다.<br>행성 이름이나 다른 키워드로 찾아보세요.</div>';
+      return;
+    }
+
+    searchResults.innerHTML = hits.map(function (h, i) {
+      var e = h.e;
+      return '<button type="button" class="sr" data-planet="' + esc(e.planet.id) + '" data-order="' + e.order + '" data-i="' + i + '" ' +
+        'style="--c:' + e.planet.accent + '">' +
+        '<span class="sr-orb" aria-hidden="true">' + e.planet.icon + '</span>' +
+        '<span class="sr-main">' +
+          '<span class="sr-title">' + highlight(e.title, raw.trim()) + '</span>' +
+          '<span class="sr-desc">' + highlight(e.desc, raw.trim()) + '</span>' +
+        '</span>' +
+        '<span class="sr-cat">' + esc(e.planet.name) + '</span>' +
+        '</button>';
+    }).join('');
+
+    $$('.sr', searchResults).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        closeSearch();
+        openPlanet(btn.dataset.planet, { focusItem: Number(btn.dataset.order) });
+      });
+    });
+  }
+
+  function moveActive(dir) {
+    var items = $$('.sr', searchResults);
+    if (!items.length) return;
+    searchActive = (searchActive + dir + items.length) % items.length;
+    items.forEach(function (el, i) { el.classList.toggle('is-active', i === searchActive); });
+    items[searchActive].scrollIntoView({ block: 'nearest' });
+  }
+
+  function openSearch() {
+    if (!listView.hidden) setListMode(false);
+    searchOverlay.hidden = false;
+    runSearch('');
+    setTimeout(function () { searchInput.value = ''; searchInput.focus(); }, 30);
+  }
+  function closeSearch() {
+    searchOverlay.hidden = true;
+    searchInput.value = '';
+  }
+
+  $('#searchBtn').addEventListener('click', openSearch);
+  $('#searchClose').addEventListener('click', closeSearch);
+  searchOverlay.addEventListener('click', function (e) {
+    if (e.target.dataset && e.target.dataset.close === 'search') closeSearch();
+  });
+  searchInput.addEventListener('input', function () { runSearch(searchInput.value); });
+  searchInput.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
+    else if (e.key === 'Enter') {
+      var items = $$('.sr', searchResults);
+      var pickIdx = searchActive >= 0 ? searchActive : (searchInput.value.trim() && items.length ? 0 : -1);
+      if (pickIdx >= 0 && items[pickIdx]) items[pickIdx].click();
+    }
+  });
+
+  /* ── QR ─────────────────────────────────────────────────── */
+  function currentURL() {
+    return location.origin + location.pathname;
+  }
+
+  function buildQR() {
+    var url = currentURL();
+    $('#qrUrl').textContent = url;
+    if (typeof window.qrcode !== 'function') {
+      toast('QR 생성 도구를 불러오지 못했습니다');
+      return;
+    }
+    var qr = window.qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    var n = qr.getModuleCount();
+    var quiet = 4;
+    var total = n + quiet * 2;
+    var cell = Math.max(2, Math.floor(512 / total));
+    var size = cell * total;
+    qrCanvas.width = size;
+    qrCanvas.height = size;
+    var g = qrCanvas.getContext('2d');
+    g.fillStyle = '#ffffff';
+    g.fillRect(0, 0, size, size);
+    g.fillStyle = '#0b1020';
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        if (qr.isDark(r, c)) {
+          g.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+        }
+      }
+    }
+  }
+
+  function openQR() {
+    buildQR();
+    qrOverlay.hidden = false;
+    setTimeout(function () { $('#qrClose').focus({ preventScroll: true }); }, 60);
+  }
+  function closeQR() { qrOverlay.hidden = true; }
+
+  $('#qrBtn').addEventListener('click', openQR);
+  $('#qrClose').addEventListener('click', closeQR);
+  qrOverlay.addEventListener('click', function (e) {
+    if (e.target.dataset && e.target.dataset.close === 'qr') closeQR();
+  });
+  $('#qrCopy').addEventListener('click', function () {
+    copyText(currentURL()).then(function (ok) {
+      toast(ok ? '주소를 복사했습니다' : '복사가 막혔습니다. 주소를 길게 눌러 복사해 주세요');
+    });
+  });
+  $('#qrSave').addEventListener('click', function () {
+    try {
+      var a = document.createElement('a');
+      a.href = qrCanvas.toDataURL('image/png');
+      a.download = 'kkotponne-universe-qr.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast('QR 이미지를 저장했습니다');
+    } catch (e) {
+      toast('이미지 저장이 막혔습니다');
+    }
+  });
+
+  /* ── 키보드 · 라우팅 ─────────────────────────────────────── */
+  document.addEventListener('keydown', function (e) {
+    var tag = (e.target.tagName || '').toLowerCase();
+    var typing = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
+    if (e.key === 'Escape') {
+      if (!qrOverlay.hidden) { closeQR(); return; }
+      if (!searchOverlay.hidden) { closeSearch(); return; }
+      if (panel.classList.contains('open')) { closePanel(); return; }
+      if (!listView.hidden) { setListMode(false); return; }
+    }
+    if (!typing && (e.key === '/' || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'))) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
+  function routeFromHash() {
+    var id = (location.hash || '').replace('#', '');
+    if (!id) return;
+    if (id === 'about') openAbout();
+    else if (planetById(id)) openPlanet(id);
+    else if (id.indexOf('list-') === 0) {
+      setListMode(true, false);
+      var el = document.getElementById(id);
+      if (el) el.scrollIntoView({ block: 'start' });
+    }
+  }
+  window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('popstate', routeFromHash);
+
+  /* ── 포인터 시차 ─────────────────────────────────────────── */
+  stage.addEventListener('pointermove', function (e) {
+    pointer.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+    pointer.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  /* ── 리사이즈 · 시작 ─────────────────────────────────────── */
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      sizeStars();
+      layoutSolar();
+    }, 120);
+  });
+  window.addEventListener('orientationchange', function () {
+    setTimeout(function () { sizeStars(); layoutSolar(); }, 260);
+  });
+
+  function init() {
+    var title = DATA.owner.name + ' · ' + DATA.owner.brand + ' — 디지털 우주 지도';
+    document.title = title;
+
+    $('#countBadge').textContent = '행성 ' + PLANETS.length + ' · 자료 ' + TOTAL_ITEMS;
+    searchMeta.innerHTML = '전체 자료 <b>' + TOTAL_ITEMS + '</b>개 · 행성 <b>' + PLANETS.length + '</b>개';
+
+    sizeStars();
+    buildPlanets();
+    layoutSolar();
+    requestAnimationFrame(frame);
+
+    var saved = null;
+    try { saved = localStorage.getItem('kpu-view'); } catch (e) {}
+    if (saved === 'list') setListMode(true, false);
+    else renderList();
+
+    routeFromHash();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
+</body>
+</html>
