@@ -105,7 +105,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .roomline code{background:rgba(13,148,136,.10);color:#0b6f63;padding:3px 8px;border-radius:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
 
 /* ---------- 앱 헤더 ---------- */
-#app{padding-bottom:82px}
+#app{padding-bottom:82px;max-width:820px;margin:0 auto}
+html{scroll-padding-bottom:110px}
+@media (min-width:560px){.sig-row{max-width:540px;margin:0 auto}}
 header.topbar{
   position:sticky;top:0;z-index:40;
   padding:calc(env(safe-area-inset-top) + 9px) 13px 9px;
@@ -172,7 +174,8 @@ main{padding:12px 12px 6px}
 .tabpane{animation:fade .22s ease}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 nav.tabbar{
-  position:fixed;left:0;right:0;bottom:0;z-index:45;
+  position:fixed;left:50%;bottom:0;z-index:45;transform:translateX(-50%);
+  width:100%;max-width:820px;
   display:flex;gap:6px;padding:8px 10px calc(env(safe-area-inset-bottom) + 8px);
   background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border-top:1px solid var(--line);
@@ -506,10 +509,10 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
     <section class="tabpane hidden" id="pane3">
       <div class="card work-form">
         <div class="sec-title" style="margin:0 0 9px"><span class="dot"></span>내 작품 자랑하기</div>
-        <div class="upload-zone" id="uploadZone">
+        <button type="button" class="upload-zone" id="uploadZone" style="width:100%;display:block">
           <span class="big">📸</span>
           <span id="uploadTx">사진 찍거나 골라서 올리기</span>
-        </div>
+        </button>
         <input type="file" id="fileInput" accept="image/*" class="hidden">
         <div class="preview hidden" id="previewWrap">
           <img id="previewImg" alt="올릴 작품 미리보기">
@@ -3767,6 +3770,7 @@ var qrcode = function() {
     if (v === TEACHER_PIN) {
       isTeacher = true; store('mylive.teacher.' + room, '1');
       $('pinModal').classList.add('hidden');
+      renderMeta(); renderChat(); renderWorks();
       showTeacher();
       toast('교사 모드로 들어왔어요 ⚙️');
     } else {
