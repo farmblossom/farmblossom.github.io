@@ -201,7 +201,7 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 
 /* ---------- 채팅 ---------- */
 .chat-wrap{padding:10px 0 0}
-.chat-list{display:flex;flex-direction:column;gap:9px;padding:4px 2px 10px;max-height:52vh;overflow-y:auto;scroll-behavior:smooth}
+.chat-list{display:flex;flex-direction:column;gap:9px;padding:4px 2px 10px;max-height:52vh;min-height:32vh;overflow-y:auto;scroll-behavior:smooth}
 .msg{display:flex;gap:8px;max-width:100%}
 .msg .av{width:31px;height:31px;flex:0 0 31px;border-radius:11px;display:grid;place-items:center;font-size:16px;background:rgba(20,184,166,.12)}
 .msg .body{min-width:0;flex:1}
@@ -236,7 +236,7 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 .video-head span{font-size:10.5px;color:var(--muted);font-weight:700}
 .frame{position:relative;margin:0 auto;border-radius:14px;overflow:hidden;background:#06110f;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
 .frame.wide{width:100%;aspect-ratio:16/9}
-.frame.short{width:min(100%,300px);aspect-ratio:9/16;margin:0 auto}
+.frame.short{width:min(100%,250px);aspect-ratio:9/16;margin:0 auto}
 .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 .video-foot{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:10.5px;color:var(--muted);font-weight:700;justify-content:center}
 
@@ -470,19 +470,7 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 
     <!-- ---------- 탭 2 ---------- -->
     <section class="tabpane hidden" id="pane2">
-      <div class="card video-card">
-        <div class="video-head">
-          <div class="tb-logo" style="background:linear-gradient(135deg,#ef4444,#f59e0b);width:30px;height:30px;font-size:15px">🎬</div>
-          <div class="t">
-            <b id="videoLabel">🎬 쌤의 반전 본업 브이로그 🚜</b>
-            <span>오늘의 수업 영상 · 선생님이 실시간으로 바꿀 수 있어요</span>
-          </div>
-        </div>
-        <div class="frame short" id="videoFrame"></div>
-        <div class="video-foot" id="videoFoot">유튜브에서 재생 · 소리 확인은 이어폰으로 🎧</div>
-      </div>
-
-      <div class="draw" style="margin-top:12px">
+      <div class="draw">
         <h3>🎲 랜덤 AI 프롬프트 뽑기</h3>
         <div class="sub">버튼을 누르면 오늘 바로 써먹을 프롬프트가 나와요. 나온 문장은 복사해서 AI에 붙여넣기!</div>
         <div class="drawbox" id="drawBox">
@@ -493,6 +481,18 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
           <button class="btn violet" id="drawBtn">🎲 프롬프트 뽑기</button>
           <button class="btn" id="drawCopy">📋 복사</button>
         </div>
+      </div>
+
+      <div class="card video-card" style="margin-top:12px">
+        <div class="video-head">
+          <div class="tb-logo" style="background:linear-gradient(135deg,#ef4444,#f59e0b);width:30px;height:30px;font-size:15px">🎬</div>
+          <div class="t">
+            <b id="videoLabel">🎬 쌤의 반전 본업 브이로그 🚜</b>
+            <span>오늘의 수업 영상 · 선생님이 실시간으로 바꿀 수 있어요</span>
+          </div>
+        </div>
+        <div class="frame short" id="videoFrame"></div>
+        <div class="video-foot" id="videoFoot">유튜브에서 재생 · 소리 확인은 이어폰으로 🎧</div>
       </div>
 
       <div class="sec-title"><span class="dot"></span>AI 프롬프트 5단계 치트키</div>
