@@ -355,6 +355,11 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 #toast.show{opacity:1;transform:translate(-50%,0)}
 .confetti{position:fixed;pointer-events:none;z-index:95;font-size:16px;animation:pop 1s ease-out forwards}
 @keyframes pop{0%{transform:translate(0,0) scale(.6);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.1);opacity:0}}
+.lightbox{position:fixed;inset:0;z-index:80;background:rgba(6,20,17,.93);display:none;place-items:center;padding:12px}
+.lightbox.on{display:grid}
+.lightbox img{max-width:100%;max-height:88vh;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.lightbox .cap{color:#d7f5ee;font-size:12.5px;font-weight:700;text-align:center;margin-top:10px;max-width:92vw}
+.lightbox .close{position:absolute;top:calc(env(safe-area-inset-top) + 12px);right:14px;color:#fff;font-size:22px;font-weight:800}
 @media (min-width:560px){
   .robot-grid{grid-template-columns:1fr 1fr}
   .work-grid{grid-template-columns:repeat(3,1fr)}
@@ -644,6 +649,14 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 </div>
 
 <div id="toast"></div>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lbClose" aria-label="닫기">✕</button>
+  <div style="display:flex;flex-direction:column;align-items:center">
+    <img id="lbImg" alt="작품 크게 보기">
+    <div class="cap" id="lbCap"></div>
+  </div>
+</div>
 
 <!-- ================= 라이브러리 (인라인 · 외부 CDN 의존 없음) ================= -->
 <script>
@@ -3018,6 +3031,7 @@ var qrcode = function() {
     d = d || new Date();
     return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
   }
+  function fileStamp() { return stamp().replace(/[^0-9]/g, ''); }
   var toastTimer = null;
   function toast(msg) {
     var t = $('toast'); t.textContent = msg; t.classList.add('show');
@@ -3491,6 +3505,8 @@ var qrcode = function() {
       var img = document.createElement('img');
       img.loading = 'lazy'; img.alt = (w.desc || '작품 사진');
       img.src = w.image || '';
+      img.style.cursor = 'zoom-in';
+      img.onclick = function () { openLightbox(w); };
       ph.appendChild(img);
       var mt = document.createElement('div'); mt.className = 'meta';
       var who = document.createElement('div'); who.className = 'who';
@@ -3509,6 +3525,15 @@ var qrcode = function() {
       grid.appendChild(el);
     });
   }
+
+  function openLightbox(w) {
+    var b = badgeOf(w.badge);
+    $('lbImg').src = w.image || '';
+    $('lbCap').textContent = b.em + ' ' + (w.num || '') + '번 ' + (w.name || '') + ' · ' + (w.desc || '') +
+      ' · ❤ ' + ((w.likedBy || []).length);
+    $('lightbox').classList.add('on');
+  }
+  function closeLightbox() { $('lightbox').classList.remove('on'); }
 
   function toggleLike(w, liked) {
     if (!colWork) return;
@@ -4014,13 +4039,15 @@ var qrcode = function() {
     on($('quizClear'), 'click', clearQuiz);
     on($('videoSave'), 'click', saveVideo);
     on($('videoReset'), 'click', resetVideo);
-    on($('exChat'), 'click', function () { downloadTxt('밀양여중_AI교실_채팅_' + room + '_' + stamp().replace(/[: ]/g, '') + '.txt', chatTxt()); });
-    on($('exWorks'), 'click', function () { downloadTxt('밀양여중_AI교실_작품_' + room + '_' + stamp().replace(/[: ]/g, '') + '.txt', worksTxt()); });
-    on($('exRefl'), 'click', function () { downloadTxt('밀양여중_AI교실_소감_' + room + '_' + stamp().replace(/[: ]/g, '') + '.txt', reflTxt()); });
-    on($('exSummary'), 'click', function () { downloadTxt('밀양여중_AI교실_수업요약_' + room + '_' + stamp().replace(/[: ]/g, '') + '.txt', summaryTxt()); });
+    on($('exChat'), 'click', function () { downloadTxt('밀양여중_AI교실_채팅_' + room + '_' + fileStamp() + '.txt', chatTxt()); });
+    on($('exWorks'), 'click', function () { downloadTxt('밀양여중_AI교실_작품_' + room + '_' + fileStamp() + '.txt', worksTxt()); });
+    on($('exRefl'), 'click', function () { downloadTxt('밀양여중_AI교실_소감_' + room + '_' + fileStamp() + '.txt', reflTxt()); });
+    on($('exSummary'), 'click', function () { downloadTxt('밀양여중_AI교실_수업요약_' + room + '_' + fileStamp() + '.txt', summaryTxt()); });
     on($('copyPinBtn'), 'click', copyPins);
     on($('tpCopyPin'), 'click', copyPins);
     on($('qrOpen'), 'click', showQR);
+    on($('lbClose'), 'click', closeLightbox);
+    on($('lightbox'), 'click', function (e) { if (e.target.id !== 'lbImg') closeLightbox(); });
     on($('qrClose'), 'click', function () { $('qrModal').classList.add('hidden'); });
     on($('qrCopy'), 'click', function () { copyText(pageUrl); });
 
