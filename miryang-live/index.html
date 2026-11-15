@@ -4482,7 +4482,7 @@ var qrcode = function() {
         g.position.set(e.x, 0, e.z);
         g.rotation.y = e.y || 0;
         var hi = new THREE.Sprite(new THREE.SpriteMaterial({ map: galWaveTex(), transparent: true, depthTest: false }));
-        hi.position.set(0, 3.0, 0); hi.scale.set(.9, .9, 1); hi.visible = false;
+        hi.position.set(0, 2.95, 0); hi.scale.set(.62, .62, 1); hi.visible = false;
         g.add(hi);
         GAL.scene.add(g);
         pl = GAL.players[uid] = { mesh: g, hi: hi, tx: e.x, tz: e.z, ty: e.y || 0, walkT: 0 };
