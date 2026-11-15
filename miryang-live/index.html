@@ -367,8 +367,8 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
 }
 
 /* ---------- 🏛️ 3D 전시관 ---------- */
-.gal-stage{position:relative;width:100%;height:min(64vh,540px);min-height:330px;border-radius:20px;overflow:hidden;background:linear-gradient(170deg,#f8f0e4,#e7d9c3);box-shadow:var(--shadow-lg);touch-action:none;-webkit-user-select:none;user-select:none}
-.gal-stage canvas{display:block;width:100%;height:100%}
+.gal-stage{position:relative;width:100%;height:min(60vh,500px);min-height:300px;border-radius:20px;overflow:hidden;background:linear-gradient(170deg,#f8f0e4,#e7d9c3);box-shadow:var(--shadow-lg);touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.gal-stage canvas{display:block;width:100%;height:100%;touch-action:pan-y}
 .gal-veil{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:22px;text-align:center;background:rgba(247,240,228,.94);color:#7a5c3e;font-size:12.5px;font-weight:800;line-height:1.6}
 .gal-hud{position:absolute;left:0;right:0;top:0;z-index:5;display:flex;align-items:center;gap:7px;padding:9px;pointer-events:none}
 .gal-hud>*{pointer-events:auto}
@@ -4450,12 +4450,12 @@ var qrcode = function() {
     });
 
     /* 포토존 */
-    var rug = new THREE.Mesh(new THREE.CircleGeometry(3.1, 40),
+    var rug = new THREE.Mesh(new THREE.CircleGeometry(2.7, 40),
       new THREE.MeshStandardMaterial({ color: 0xf7c8d8, roughness: .9 }));
-    rug.rotation.x = -Math.PI / 2; rug.position.set(0, .03, 6.9); sc.add(rug);
-    var rug2 = new THREE.Mesh(new THREE.RingGeometry(2.5, 2.75, 40),
+    rug.rotation.x = -Math.PI / 2; rug.position.set(0, .03, 7.3); sc.add(rug);
+    var rug2 = new THREE.Mesh(new THREE.RingGeometry(2.15, 2.36, 40),
       new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .8 }));
-    rug2.rotation.x = -Math.PI / 2; rug2.position.set(0, .05, 6.9); sc.add(rug2);
+    rug2.rotation.x = -Math.PI / 2; rug2.position.set(0, .05, 7.3); sc.add(rug2);
     var backdrop = new THREE.Mesh(new THREE.PlaneGeometry(9, 5.6),
       new THREE.MeshBasicMaterial({ map: galPhotoTex() }));
     backdrop.position.set(0, 3.4, 8.9); backdrop.rotation.y = Math.PI; sc.add(backdrop);
@@ -4616,7 +4616,7 @@ var qrcode = function() {
   }
   function galGoPhoto() {
     if (!GAL.ready) { toast('전시관을 준비하고 있어요'); return; }
-    GAL.pos.x = 0; GAL.pos.z = 6.9; GAL.yaw = Math.PI; GAL.pitch = .12;
+    GAL.pos.x = 0; GAL.pos.z = 7.2; GAL.yaw = Math.PI; GAL.pitch = .12;
     GAL.muteUntil = Date.now() + 6000;
     if (GAL.avatar) GAL.avatar.rotation.y = Math.PI;
     toast('📸 포토존! 액자 대신 사진 찍어 보세요');
