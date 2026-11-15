@@ -365,6 +365,50 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
   .work-grid{grid-template-columns:repeat(3,1fr)}
   .hero h1{font-size:31px}
 }
+
+/* ---------- 🏛️ 3D 전시관 ---------- */
+.gal-stage{position:relative;width:100%;height:min(64vh,540px);min-height:330px;border-radius:20px;overflow:hidden;background:linear-gradient(170deg,#f8f0e4,#e7d9c3);box-shadow:var(--shadow-lg);touch-action:none;-webkit-user-select:none;user-select:none}
+.gal-stage canvas{display:block;width:100%;height:100%}
+.gal-veil{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:22px;text-align:center;background:rgba(247,240,228,.94);color:#7a5c3e;font-size:12.5px;font-weight:800;line-height:1.6}
+.gal-hud{position:absolute;left:0;right:0;top:0;z-index:5;display:flex;align-items:center;gap:7px;padding:9px;pointer-events:none}
+.gal-hud>*{pointer-events:auto}
+.gal-chip{font-size:10.5px;font-weight:900;color:#5b3f24;background:rgba(255,255,255,.84);border:1px solid rgba(140,95,50,.18);border-radius:999px;padding:6px 10px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.gal-hud .gl-sp{flex:1}
+.gal-hud .btn{box-shadow:0 6px 16px rgba(90,60,30,.20)}
+.gal-tip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:5;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;font-weight:800;color:#5b3f24;background:rgba(255,255,255,.82);border-radius:999px;padding:6px 11px}
+.gal-joy{position:absolute;left:12px;bottom:12px;z-index:6;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.26);border:2px solid rgba(255,255,255,.62);touch-action:none}
+.gal-joy span{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:linear-gradient(135deg,var(--mint2),var(--violet2));box-shadow:0 6px 16px rgba(16,63,54,.35);pointer-events:none}
+.gal-act{position:absolute;left:50%;bottom:54px;transform:translateX(-50%);z-index:7;padding:10px 16px;border-radius:999px;font-weight:900;font-size:12.5px;color:#fff;background:linear-gradient(135deg,#f59e0b,#f97316);box-shadow:0 10px 24px rgba(245,158,11,.45)}
+.gal-act:active{transform:translateX(-50%) scale(.96)}
+.gal-fallback{padding:2px 0 0}
+.gal-strip{display:flex;gap:8px;overflow-x:auto;padding:9px 2px 4px;-webkit-overflow-scrolling:touch}
+.gal-strip .t{flex:0 0 auto;width:74px;text-align:center}
+.gal-strip img{width:74px;height:74px;object-fit:cover;border-radius:12px;border:2px solid #fff;box-shadow:0 4px 12px rgba(16,63,54,.14);background:#efe6d8}
+.gal-strip .t b{display:block;font-size:9.5px;font-weight:800;color:var(--ink2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal-strip .empty{font-size:11.5px;color:var(--muted);font-weight:700;padding:8px 2px}
+#galCard{position:fixed;inset:0;z-index:95;display:none;place-items:center;padding:14px;background:rgba(8,24,20,.66);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+#galCard.on{display:grid}
+.gal-cardbox{width:100%;max-width:430px;max-height:92vh;overflow-y:auto;background:#fffdf9;border-radius:22px;box-shadow:0 24px 60px rgba(0,0,0,.45);border:1px solid rgba(150,110,60,.28)}
+.gal-cardbox .hd{display:flex;align-items:flex-start;gap:8px;padding:13px 14px 8px}
+.gal-cardbox .hd .b{font-weight:900;font-size:14px;line-height:1.35;flex:1;word-break:keep-all}
+.gal-cardbox .hd .who{display:block;font-size:10.5px;color:var(--muted);font-weight:800;margin-top:3px}
+.gal-cardbox .hd .x{width:28px;height:28px;border-radius:50%;background:rgba(16,63,54,.07);font-weight:900;font-size:13px;display:grid;place-items:center;flex:0 0 auto}
+.gal-cardbox .frame{background:#f4ece0;padding:10px}
+.gal-cardbox .frame img{display:block;width:100%;max-height:50vh;object-fit:contain;border-radius:8px;background:#fff}
+.gal-cardbox .brow{display:flex;align-items:center;gap:8px;padding:10px 14px 0}
+.gal-cardbox .brow .ds{flex:1;font-size:12px;color:var(--ink2);font-weight:700;line-height:1.45;word-break:keep-all}
+.gal-like{display:inline-flex;align-items:center;gap:5px;padding:9px 13px;border-radius:999px;font-weight:900;font-size:13px;background:rgba(236,72,153,.10);color:#be185d;border:1px solid rgba(236,72,153,.25);flex:0 0 auto}
+.gal-like.on{background:linear-gradient(135deg,#ec4899,#f43f5e);color:#fff;border:0}
+.gal-big{width:100%;margin:10px 14px 0;padding:9px 0;border-radius:12px;font-weight:800;font-size:12.5px;background:rgba(13,148,136,.10);color:#0b6f63;width:calc(100% - 28px);text-align:center}
+.gal-cmts{padding:12px 14px 4px}
+.gal-cmts .ct{font-size:11.5px;font-weight:900;color:var(--ink2);margin-bottom:6px}
+.gal-cm{font-size:12px;line-height:1.5;color:var(--ink);padding:6px 0;border-top:1px dashed rgba(13,148,136,.16);word-break:keep-all}
+.gal-cm:first-of-type{border-top:0}
+.gal-cm b{font-size:11px;color:#0b6f63;font-weight:900;margin-right:5px}
+.gal-cin{display:flex;gap:7px;padding:8px 14px 14px}
+.gal-cin input{flex:1;min-width:0;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-weight:700;outline:none;font-size:13px}
+.gal-cin button{flex:0 0 auto;padding:0 14px;border-radius:12px;font-weight:900;font-size:13px;color:#fff;background:linear-gradient(135deg,var(--mint),var(--mint2))}
+
 </style>
 </head>
 <body>
@@ -549,12 +593,57 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
       </div>
       <div style="height:8px"></div>
     </section>
+
+    <!-- ---------- 탭 4 : 3D 메타버스 전시관 ---------- -->
+    <section class="tabpane hidden" id="pane4">
+      <div class="gal-stage" id="galStage">
+        <div class="gal-veil" id="galVeil">🏛️ 전시관을 짓고 있어요…<br><span style="font-weight:700;opacity:.8">잠시만 기다려 주세요</span></div>
+        <div class="gal-hud">
+          <span class="gal-chip" id="galChip">🖼 작품 0점</span>
+          <span class="gal-chip" id="galChip2">👥 1명</span>
+          <span class="gl-sp"></span>
+          <button class="btn small ghost" id="galPhoto">📸 포토존 가기</button>
+        </div>
+        <div class="gal-tip" id="galTip">드래그 = 둘러보기 · WASD/방향키 = 이동 · 액자를 콕 누르면 작품 카드</div>
+        <div class="gal-joy" id="galJoy"><span id="galJoyKnob"></span></div>
+        <button class="gal-act hidden" id="galAct">👀 작품 보기</button>
+      </div>
+
+      <div class="gal-fallback hidden" id="galFallback"></div>
+
+      <div class="card work-form" style="margin-top:12px">
+        <div class="sec-title" style="margin:0 0 9px"><span class="dot"></span>전시관에 내 작품 걸기</div>
+        <button type="button" class="upload-zone" id="galZone" style="width:100%;display:block">
+          <span class="big">🖼</span>
+          <span id="galUploadTx">사진 찍거나 골라서 액자에 걸기</span>
+        </button>
+        <input type="file" id="galFile" accept="image/*" class="hidden">
+        <div class="preview hidden" id="galPrevWrap">
+          <img id="galPrevImg" alt="전시할 작품 미리보기">
+          <span class="size" id="galSizeTag"></span>
+        </div>
+        <div class="field" style="margin:10px 0 8px">
+          <label for="galTitle">작품 제목</label>
+          <input id="galTitle" type="text" maxlength="30" placeholder="예) 수채화로 그린 우리 동네">
+        </div>
+        <div class="field" style="margin:0 0 8px">
+          <label for="galDesc">한 줄 설명</label>
+          <input id="galDesc" type="text" maxlength="60" placeholder="예) 터틀 코딩으로 그린 하트 주행">
+        </div>
+        <button class="btn primary" id="galSubmit" style="width:100%" disabled>액자에 걸기 🏛️</button>
+      </div>
+
+      <div class="sec-title"><span class="dot"></span>지금 전시 중 <span class="pill" id="galCount">0</span></div>
+      <div class="gal-strip" id="galStrip"></div>
+      <div style="height:8px"></div>
+    </section>
   </main>
 
   <nav class="tabbar">
     <button class="on" data-tab="1"><span class="ic">💬</span>질문&amp;퀴즈</button>
     <button data-tab="2"><span class="ic">🧠</span>AI·로봇 치트키</button>
     <button data-tab="3"><span class="ic">🏆</span>작품·투표</button>
+    <button data-tab="4"><span class="ic">🏛️</span>3D 전시관</button>
   </nav>
 </div>
 
@@ -655,6 +744,29 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
   <div style="display:flex;flex-direction:column;align-items:center">
     <img id="lbImg" alt="작품 크게 보기">
     <div class="cap" id="lbCap"></div>
+  </div>
+</div>
+
+<div id="galCard">
+  <div class="gal-cardbox">
+    <div class="hd">
+      <div class="b" id="galCardTitle">작품</div>
+      <button class="x" id="galCardClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="frame"><img id="galCardImg" alt="전시 작품"></div>
+    <div class="brow">
+      <div class="ds" id="galCardDesc"></div>
+      <button class="gal-like" id="galCardLike">❤️ 0</button>
+    </div>
+    <button class="gal-big" id="galCardBig">🔍 크게 보기</button>
+    <div class="gal-cmts">
+      <div class="ct">💬 댓글 <span id="galCmCount">0</span></div>
+      <div id="galCmList"></div>
+    </div>
+    <div class="gal-cin">
+      <input id="galCmInput" type="text" maxlength="80" placeholder="한마디 남겨 주세요">
+      <button id="galCmSend" aria-label="댓글 보내기">➤</button>
+    </div>
   </div>
 </div>
 
@@ -3155,6 +3267,8 @@ var qrcode = function() {
       colWork = colMeta.collection('works');
       colRefl = colMeta.collection('reflections');
       colSignal = colMeta.collection('signals');
+      colGallery = colMeta.collection('gallery');
+      colPresence = colMeta.collection('presence');
       return true;
     } catch (e) { handleDbError(e); return false; }
   }
@@ -3199,6 +3313,19 @@ var qrcode = function() {
       renderSignals();
       if (isTeacher) renderTeacherSignals();
     }, handleDbError);
+
+    colGallery.onSnapshot(function (snap) {
+      galItems = snap.docs.map(function (d) { var v = d.data(); v.id = d.id; return v; });
+      renderGallery();
+    }, gWarn);
+
+    colPresence.onSnapshot(function (snap) {
+      GAL.players = {};
+      snap.docs.forEach(function (d) {
+        if (d.id === myUid) return;
+        GAL.players[d.id] = d.data();
+      });
+    }, gWarn);
   }
 
   /* ================= 입장 ================= */
@@ -3249,7 +3376,7 @@ var qrcode = function() {
     $('tbSub').textContent = b.sub + ' · 실시간 수업';
     $('headRoom').textContent = room;
     $('tpRoom').textContent = '방 ' + room;
-    renderMeta(); renderVideo(); renderWorks(); renderRefl();
+    renderMeta(); renderVideo(); renderWorks(); renderRefl(); renderGallery();
     restoreMySignal();
   }
 
@@ -3963,9 +4090,10 @@ var qrcode = function() {
 
   /* ================= 탭 ================= */
   function setTab(n) {
-    ['1', '2', '3'].forEach(function (i) {
+    ['1', '2', '3', '4'].forEach(function (i) {
       $('pane' + i).classList.toggle('hidden', i !== n);
     });
+    if (n === '4') { galShow(); } else { galHide(); }
     Array.prototype.slice.call(document.querySelectorAll('nav.tabbar button')).forEach(function (b) {
       b.classList.toggle('on', b.dataset.tab === n);
     });
@@ -4073,6 +4201,824 @@ var qrcode = function() {
       }
     });
   }
+
+  /* ================= 🏛️ 3D 메타버스 전시관 ================= */
+  var colGallery = null, colPresence = null;
+  var galItems = [], galPending = null, galOpenId = null;
+  var GAL = {
+    loading: false, ready: false, failed: false,
+    renderer: null, scene: null, camera: null, clock: null,
+    frames: [], pick: [], avatar: null, others: {}, tex: {},
+    pos: { x: 0, z: 6.4 }, yaw: Math.PI, pitch: 0.2, keys: {}, joy: null,
+    near: null, lastAutoId: '', lastAuto: 0, muteUntil: 0, raf: 0, shown: false, presTimer: null, players: {}
+  };
+  var GAL_W = 3.0, GAL_H = 2.25;
+  var GAL_SLOTS = [
+    { x: -7.2, y: 3.55, z: -8.86, ry: 0 },
+    { x: -3.6, y: 3.55, z: -8.86, ry: 0 },
+    { x: 0, y: 3.55, z: -8.86, ry: 0 },
+    { x: 3.6, y: 3.55, z: -8.86, ry: 0 },
+    { x: 7.2, y: 3.55, z: -8.86, ry: 0 },
+    { x: -12.86, y: 3.4, z: -4.6, ry: Math.PI / 2 },
+    { x: -12.86, y: 3.4, z: 0.4, ry: Math.PI / 2 },
+    { x: -12.86, y: 3.4, z: 5.4, ry: Math.PI / 2 },
+    { x: 12.86, y: 3.4, z: -4.6, ry: -Math.PI / 2 },
+    { x: 12.86, y: 3.4, z: 0.4, ry: -Math.PI / 2 },
+    { x: 12.86, y: 3.4, z: 5.4, ry: -Math.PI / 2 }
+  ];
+  function gWarn(e) { try { console.warn('[GALLERY]', e && (e.code || e.message) || e); } catch (x) {} }
+  function galEsc(s) { return String(s == null ? '' : s); }
+  function galClip(s, n) { s = galEsc(s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function galSorted() {
+    return galItems.slice().sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+  }
+  function galById(id) {
+    for (var i = 0; i < galItems.length; i++) if (galItems[i].id === id) return galItems[i];
+    return null;
+  }
+
+  /* ---------- 3D 라이브러리 로드 ---------- */
+  function galLoadThree(cb) {
+    if (window.THREE) { cb(true); return; }
+    if (GAL.loading) { setTimeout(function () { galLoadThree(cb); }, 250); return; }
+    GAL.loading = true;
+    var urls = ['https://unpkg.com/three@0.152.2/build/three.min.js',
+                'https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js'];
+    var idx = 0, done = false;
+    function next() {
+      if (done) return;
+      if (idx >= urls.length) { done = true; GAL.failed = true; cb(false); return; }
+      var s = document.createElement('script');
+      s.src = urls[idx++];
+      s.async = true;
+      s.onload = function () { if (done) return; done = true; cb(!!window.THREE); };
+      s.onerror = function () { next(); };
+      document.head.appendChild(s);
+    }
+    next();
+    setTimeout(function () { if (!done && !window.THREE) { done = true; GAL.failed = true; cb(false); } }, 9000);
+  }
+
+  /* ---------- 텍스처 헬퍼 ---------- */
+  function galCanvasTex(c, rx, ry) {
+    var t = new THREE.CanvasTexture(c);
+    if (THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+    if (rx || ry) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx || 1, ry || 1); }
+    return t;
+  }
+  function galWoodTex() {
+    var c = document.createElement('canvas'); c.width = 256; c.height = 256;
+    var x = c.getContext('2d');
+    var tones = ['#c9a271', '#c19a68', '#d2ad7c', '#bd9563', '#cfa877', '#c49d6b'];
+    for (var i = 0; i < 8; i++) {
+      x.fillStyle = tones[i % tones.length];
+      x.fillRect(i * 32, 0, 32, 256);
+      x.strokeStyle = 'rgba(120,84,48,.35)'; x.lineWidth = 2;
+      x.beginPath(); x.moveTo(i * 32, 0); x.lineTo(i * 32, 256); x.stroke();
+      x.strokeStyle = 'rgba(105,72,40,.18)'; x.lineWidth = 1;
+      for (var k = 0; k < 5; k++) {
+        var gx = i * 32 + 5 + k * 5 + Math.random() * 3;
+        x.beginPath(); x.moveTo(gx, Math.random() * 40); x.lineTo(gx + 2, 200 + Math.random() * 56); x.stroke();
+      }
+    }
+    return galCanvasTex(c, 7, 7);
+  }
+  function galLabelTex(main, sub, bg) {
+    var c = document.createElement('canvas'); c.width = 512; c.height = 168;
+    var x = c.getContext('2d');
+    x.fillStyle = bg || 'rgba(255,253,247,.94)';
+    var r = 28;
+    x.beginPath();
+    x.moveTo(r, 8); x.arcTo(504, 8, 504, 160, r); x.arcTo(504, 160, 8, 160, r);
+    x.arcTo(8, 160, 8, 8, r); x.arcTo(8, 8, 504, 8, r); x.closePath(); x.fill();
+    x.strokeStyle = 'rgba(150,110,60,.45)'; x.lineWidth = 5; x.stroke();
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.fillStyle = '#3f2d16';
+    x.font = 'bold 62px system-ui,-apple-system,"Noto Color Emoji","Apple Color Emoji",sans-serif';
+    x.fillText(main, 256, sub ? 70 : 84);
+    if (sub) {
+      x.fillStyle = '#8a7255'; x.font = 'bold 34px system-ui,sans-serif';
+      x.fillText(sub, 256, 124);
+    }
+    return galCanvasTex(c);
+  }
+  function galEmptyArtTex() {
+    var c = document.createElement('canvas'); c.width = 512; c.height = 384;
+    var x = c.getContext('2d');
+    x.fillStyle = '#f6efe2'; x.fillRect(0, 0, 512, 384);
+    x.strokeStyle = 'rgba(160,120,70,.35)'; x.lineWidth = 6; x.strokeRect(20, 20, 472, 344);
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.font = '110px system-ui,"Noto Color Emoji","Apple Color Emoji",sans-serif'; x.fillText('🎨', 256, 160);
+    x.fillStyle = '#a1855f'; x.font = 'bold 30px system-ui,sans-serif';
+    x.fillText('작품을 기다리는 액자예요', 256, 268);
+    return galCanvasTex(c);
+  }
+  function galPhotoTex() {
+    var c = document.createElement('canvas'); c.width = 1024; c.height = 640;
+    var x = c.getContext('2d');
+    var g = x.createLinearGradient(0, 0, 1024, 640);
+    g.addColorStop(0, '#fef3c7'); g.addColorStop(.5, '#fde68a'); g.addColorStop(1, '#f9a8d4');
+    x.fillStyle = g; x.fillRect(0, 0, 1024, 640);
+    x.fillStyle = 'rgba(255,255,255,.5)';
+    for (var i = 0; i < 26; i++) {
+      x.beginPath(); x.arc(Math.random() * 1024, Math.random() * 640, 6 + Math.random() * 16, 0, 7); x.fill();
+    }
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.font = 'bold 96px system-ui,"Noto Color Emoji","Apple Color Emoji",sans-serif';
+    x.fillStyle = '#7c2d12'; x.fillText('📸 AI 작품 포토존', 512, 250);
+    x.font = 'bold 46px system-ui,sans-serif'; x.fillStyle = '#9a3412';
+    x.fillText('밀양여중 AI 동아리 · 오늘의 주인공', 512, 360);
+    x.font = '70px system-ui,"Noto Color Emoji",sans-serif';
+    x.fillText('💚 💜 🐢 🤖 🏓 ⚡', 512, 470);
+    return galCanvasTex(c);
+  }
+
+  /* ---------- 아바타 ---------- */
+  function galMakeAvatar(badgeKey, num, name) {
+    var b = badgeOf(badgeKey);
+    var g = new THREE.Group();
+    var bodyGeo = THREE.CapsuleGeometry ? new THREE.CapsuleGeometry(0.34, 0.52, 6, 16)
+      : new THREE.CylinderGeometry(0.34, 0.34, 0.9, 16);
+    var body = new THREE.Mesh(bodyGeo, new THREE.MeshStandardMaterial({ color: new THREE.Color(b.c1), roughness: .55, metalness: .05 }));
+    body.position.y = 0.74;
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.34, 20, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffe2c4, roughness: .8 }));
+    head.position.y = 1.46;
+    var eyeMat = new THREE.MeshBasicMaterial({ color: 0x2b2118 });
+    var e1 = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), eyeMat); e1.position.set(-0.12, 1.5, 0.3);
+    var e2 = e1.clone(); e2.position.x = 0.12;
+    var armMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(b.c2), roughness: .6 });
+    var a1 = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), armMat); a1.position.set(-0.4, 0.85, 0);
+    var a2 = a1.clone(); a2.position.x = 0.4;
+    var lab = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: galLabelTex(b.em + ' ' + (num || '') + '번', name || '', 'rgba(255,255,255,.92)'),
+      transparent: true, depthTest: false
+    }));
+    lab.position.set(0, 2.16, 0); lab.scale.set(2.1, 0.69, 1);
+    g.add(body); g.add(head); g.add(e1); g.add(e2); g.add(a1); g.add(a2); g.add(lab);
+    return g;
+  }
+
+  /* ---------- 방 만들기 ---------- */
+  function galBuildRoom() {
+    var sc = new THREE.Scene();
+    sc.background = new THREE.Color(0xf3e7d5);
+    sc.fog = new THREE.Fog(0xf3e7d5, 26, 46);
+    GAL.scene = sc;
+
+    var floor = new THREE.Mesh(new THREE.PlaneGeometry(26, 18),
+      new THREE.MeshStandardMaterial({ map: galWoodTex(), roughness: .82, metalness: .02 }));
+    floor.rotation.x = -Math.PI / 2;
+    sc.add(floor);
+
+    var wallMat = new THREE.MeshStandardMaterial({ color: 0xf7ece0, roughness: .95 });
+    var back = new THREE.Mesh(new THREE.PlaneGeometry(26, 9), wallMat);
+    back.position.set(0, 4.5, -9); sc.add(back);
+    var left = new THREE.Mesh(new THREE.PlaneGeometry(18, 9), wallMat);
+    left.rotation.y = Math.PI / 2; left.position.set(-13, 4.5, 0); sc.add(left);
+    var right = new THREE.Mesh(new THREE.PlaneGeometry(18, 9), wallMat);
+    right.rotation.y = -Math.PI / 2; right.position.set(13, 4.5, 0); sc.add(right);
+    var front = new THREE.Mesh(new THREE.PlaneGeometry(26, 9), wallMat);
+    front.rotation.y = Math.PI; front.position.set(0, 4.5, 9); sc.add(front);
+    var ceil = new THREE.Mesh(new THREE.PlaneGeometry(26, 18),
+      new THREE.MeshStandardMaterial({ color: 0xfdf6ea, roughness: 1 }));
+    ceil.rotation.x = Math.PI / 2; ceil.position.y = 9; sc.add(ceil);
+
+    var baseMat = new THREE.MeshStandardMaterial({ color: 0x8a5a2b, roughness: .5, metalness: .2 });
+    function base(w, h, d, x, y, z, ry) {
+      var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), baseMat);
+      m.position.set(x, y, z); if (ry) m.rotation.y = ry; sc.add(m);
+    }
+    base(26, 0.5, 0.2, 0, 0.25, -8.93);
+    base(0.2, 0.5, 18, -12.93, 0.25, 0);
+    base(0.2, 0.5, 18, 12.93, 0.25, 0);
+    base(26, 0.2, 0.2, 0, 8.9, -8.93);
+
+    sc.add(new THREE.HemisphereLight(0xfff3e0, 0x8a6b48, .95));
+    var dir = new THREE.DirectionalLight(0xfff0d8, .8);
+    dir.position.set(7, 12, 7); sc.add(dir);
+    var p1 = new THREE.PointLight(0xffd7a0, .55, 34); p1.position.set(-6, 7.6, 1); sc.add(p1);
+    var p2 = new THREE.PointLight(0xffd7a0, .55, 34); p2.position.set(6, 7.6, 1); sc.add(p2);
+
+    var lampMat = new THREE.MeshBasicMaterial({ color: 0xfff4d8 });
+    [-6, 0, 6].forEach(function (x) {
+      var d = new THREE.Mesh(new THREE.CircleGeometry(1.15, 24), lampMat);
+      d.rotation.x = Math.PI / 2; d.position.set(x, 8.86, -1); sc.add(d);
+    });
+
+    /* 액자들 */
+    GAL.emptyMat = new THREE.MeshBasicMaterial({ map: galEmptyArtTex() });
+    var borderMat = new THREE.MeshStandardMaterial({ color: 0x9a6a34, roughness: .42, metalness: .45 });
+    var matteMat = new THREE.MeshBasicMaterial({ color: 0xf3e8d6 });
+    GAL_SLOTS.forEach(function (slot, i) {
+      var g = new THREE.Group();
+      var border = new THREE.Mesh(new THREE.BoxGeometry(GAL_W + .34, GAL_H + .34, .18), borderMat);
+      var matte = new THREE.Mesh(new THREE.PlaneGeometry(GAL_W + .1, GAL_H + .1), matteMat);
+      matte.position.z = .1;
+      var pic = new THREE.Mesh(new THREE.PlaneGeometry(GAL_W, GAL_H), GAL.emptyMat);
+      pic.position.z = .12;
+      var plaque = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: galLabelTex('빈 액자', '작품을 걸어 주세요'), transparent: true
+      }));
+      plaque.position.set(0, -(GAL_H / 2) - .42, .2);
+      plaque.scale.set(2.5, .82, 1);
+      g.add(border); g.add(matte); g.add(pic); g.add(plaque);
+      g.position.set(slot.x, slot.y, slot.z);
+      g.rotation.y = slot.ry;
+      g.userData = { slot: slot, pic: pic, plaque: plaque, item: null, idx: i, baseY: slot.y };
+      border.userData.frame = g; pic.userData.frame = g;
+      GAL.pick.push(border); GAL.pick.push(pic);
+      GAL.frames.push(g);
+      sc.add(g);
+    });
+
+    /* 포토존 */
+    var rug = new THREE.Mesh(new THREE.CircleGeometry(3.1, 40),
+      new THREE.MeshStandardMaterial({ color: 0xf7c8d8, roughness: .9 }));
+    rug.rotation.x = -Math.PI / 2; rug.position.set(0, .03, 6.9); sc.add(rug);
+    var rug2 = new THREE.Mesh(new THREE.RingGeometry(2.5, 2.75, 40),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .8 }));
+    rug2.rotation.x = -Math.PI / 2; rug2.position.set(0, .05, 6.9); sc.add(rug2);
+    var backdrop = new THREE.Mesh(new THREE.PlaneGeometry(9, 5.6),
+      new THREE.MeshBasicMaterial({ map: galPhotoTex() }));
+    backdrop.position.set(0, 3.4, 8.9); backdrop.rotation.y = Math.PI; sc.add(backdrop);
+    var back2 = new THREE.Mesh(new THREE.BoxGeometry(9.3, 5.9, .12),
+      new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: .5, metalness: .3 }));
+    back2.position.set(0, 3.4, 8.99); sc.add(back2);
+    [-4.2, 4.2].forEach(function (x) {
+      var st = new THREE.Mesh(new THREE.CylinderGeometry(.12, .16, 5.9, 12),
+        new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: .5, metalness: .3 }));
+      st.position.set(x, 2.95, 9.1); sc.add(st);
+    });
+
+    /* 내 아바타 */
+    var me = galMakeAvatar(profile.badge, profile.num, profile.name);
+    me.position.set(GAL.pos.x, 0, GAL.pos.z);
+    GAL.avatar = me; sc.add(me);
+  }
+
+  /* ---------- 렌더 / 루프 ---------- */
+  function galResize() {
+    if (!GAL.ready) return;
+    var st = $('galStage');
+    if (!st) return;
+    var w = st.clientWidth || 360, h = st.clientHeight || 360;
+    GAL.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    GAL.renderer.setSize(w, h, false);
+    GAL.camera.aspect = w / h;
+    GAL.camera.updateProjectionMatrix();
+  }
+  function galTick() {
+    if (!GAL.ready || !GAL.shown) { GAL.raf = 0; return; }
+    GAL.raf = requestAnimationFrame(galTick);
+    var dt = Math.min(.06, GAL.clock.getDelta() || .016);
+    var f = 0, s = 0, K = GAL.keys;
+    if (K.w || K.arrowup) f += 1;
+    if (K.s || K.arrowdown) f -= 1;
+    if (K.a || K.arrowleft) s -= 1;
+    if (K.d || K.arrowright) s += 1;
+    if (GAL.joy) { f += GAL.joy.y; s += GAL.joy.x; }
+    var mag = Math.sqrt(f * f + s * s);
+    if (mag > .1) {
+      if (mag > 1) { f /= mag; s /= mag; }
+      var sp = 4.1 * dt;
+      var sy = Math.sin(GAL.yaw), cy = Math.cos(GAL.yaw);
+      var dx = (-sy * f + cy * s) * sp;
+      var dz = (-cy * f - sy * s) * sp;
+      GAL.pos.x = Math.max(-12.2, Math.min(12.2, GAL.pos.x + dx));
+      GAL.pos.z = Math.max(-8.2, Math.min(8.2, GAL.pos.z + dz));
+      if (Math.abs(dx) + Math.abs(dz) > 1e-5 && GAL.avatar) {
+        GAL.avatar.rotation.y = Math.atan2(dx, dz);
+      }
+      GAL.walkT = (GAL.walkT || 0) + dt * 9;
+    } else {
+      GAL.walkT = (GAL.walkT || 0) * .92;
+    }
+    if (GAL.avatar) {
+      GAL.avatar.position.x = GAL.pos.x;
+      GAL.avatar.position.z = GAL.pos.z;
+      GAL.avatar.position.y = Math.abs(Math.sin(GAL.walkT || 0)) * .07;
+    }
+
+    var dist = 6.0, hor = Math.cos(GAL.pitch) * dist;
+    var tx = GAL.pos.x + Math.sin(GAL.yaw) * hor;
+    var tz = GAL.pos.z + Math.cos(GAL.yaw) * hor;
+    var ty = 1.5 + Math.sin(GAL.pitch) * dist + .75;
+    var cam = GAL.camera;
+    cam.position.x += (Math.max(-12.4, Math.min(12.4, tx)) - cam.position.x) * .2;
+    cam.position.y += (Math.max(1.1, Math.min(7.6, ty)) - cam.position.y) * .2;
+    cam.position.z += (Math.max(-8.4, Math.min(8.4, tz)) - cam.position.z) * .2;
+    cam.lookAt(GAL.pos.x, 1.4, GAL.pos.z);
+
+    /* 가까운 액자 */
+    var best = null, bd = 1e9;
+    for (var i = 0; i < GAL.frames.length; i++) {
+      var fr = GAL.frames[i];
+      var ddx = fr.position.x - GAL.pos.x, ddz = fr.position.z - GAL.pos.z;
+      var d = Math.sqrt(ddx * ddx + ddz * ddz);
+      if (d < bd) { bd = d; best = fr; }
+    }
+    var bt = $('galAct');
+    if (best && bd < 3.0 && best.userData.item) {
+      var it = best.userData.item;
+      if (!GAL.near || GAL.near.id !== it.id) { GAL.near = it; }
+      if (bt) {
+        bt.textContent = '👀 ' + galClip(it.title || '작품', 14) + ' 보기';
+        bt.classList.remove('hidden');
+      }
+      if (galOpenId !== it.id && Date.now() > GAL.muteUntil && Date.now() - GAL.lastAuto > 4000) {
+        GAL.lastAuto = Date.now(); GAL.lastAutoId = it.id;
+        galCardOpen(it.id);
+      }
+    } else {
+      GAL.near = null;
+      if (bt) bt.classList.add('hidden');
+    }
+
+    galDrawOthers();
+    GAL.renderer.render(GAL.scene, GAL.camera);
+  }
+  function galDrawOthers() {
+    if (!GAL.ready) return;
+    var now = Date.now();
+    Object.keys(GAL.players || {}).forEach(function (uid) {
+      if (uid === myUid) return;
+      var p = GAL.players[uid];
+      if (!p || now - (p.ts || 0) > 45000 || typeof p.x !== 'number') {
+        if (GAL.others[uid]) { GAL.scene.remove(GAL.others[uid]); delete GAL.others[uid]; }
+        return;
+      }
+      var o = GAL.others[uid];
+      if (!o || o.userData.badge !== p.badge) {
+        if (o) GAL.scene.remove(o);
+        o = galMakeAvatar(p.badge, p.num, p.name);
+        o.userData.badge = p.badge;
+        GAL.others[uid] = o; GAL.scene.add(o);
+      }
+      o.position.x += (p.x - o.position.x) * .2;
+      o.position.z += (p.z - o.position.z) * .2;
+      if (typeof p.yaw === 'number') o.rotation.y = p.yaw;
+    });
+    var n = 1;
+    Object.keys(GAL.others).forEach(function (k) { n++; });
+    var c2 = $('galChip2');
+    if (c2) c2.textContent = '👥 ' + n + '명';
+  }
+
+  /* ---------- 전시관 초기화 ---------- */
+  function galInit() {
+    if (GAL.ready) { galResize(); return; }
+    if (GAL.loading) return;
+    var st = $('galStage');
+    if (!st) return;
+    var veil = $('galVeil');
+    if (veil) veil.classList.remove('hidden');
+    galLoadThree(function (ok) {
+      if (!ok) { galFallback(); return; }
+      try {
+        if (!profile) { profile = { num: '', name: '나', badge: 'turtle' }; }
+        var r = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        if (THREE.SRGBColorSpace) r.outputColorSpace = THREE.SRGBColorSpace;
+        r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        r.setSize(st.clientWidth || 360, st.clientHeight || 360, false);
+        r.domElement.style.width = '100%';
+        r.domElement.style.height = '100%';
+        st.insertBefore(r.domElement, st.firstChild);
+        GAL.renderer = r;
+        GAL.camera = new THREE.PerspectiveCamera(58, (st.clientWidth || 360) / (st.clientHeight || 360), .1, 200);
+        GAL.camera.position.set(0, 3.4, 11);
+        GAL.clock = new THREE.Clock();
+        galBuildRoom();
+        GAL.ready = true;
+        if (veil) veil.classList.add('hidden');
+        galApply();
+        galResize();
+        galStartLoop();
+        galBindStage();
+      } catch (e) {
+        gWarn(e);
+        galFallback();
+      }
+    });
+  }
+  function galFallback() {
+    GAL.failed = true;
+    var veil = $('galVeil');
+    if (veil) veil.classList.add('hidden');
+    var fb = $('galFallback');
+    if (!fb) return;
+    fb.classList.remove('hidden');
+    renderGallery();
+  }
+  function galStartLoop() {
+    if (!GAL.shown) return;
+    if (!GAL.raf) GAL.raf = requestAnimationFrame(galTick);
+  }
+  function galEnter(force) {
+    if (!profile) return;
+    GAL.pos.x = 0; GAL.pos.z = 6.4; GAL.yaw = Math.PI; GAL.pitch = .2;
+    if (GAL.avatar) { GAL.avatar.position.set(0, 0, 6.4); }
+    if (GAL.ready) {
+      GAL.camera.position.set(0, 3.3, .4);
+      galResize();
+      galStartLoop();
+    } else if (!force) { /* 첫 진입은 그냥 */ }
+    else { GAL.pos.z = 2.5; GAL.yaw = 0; }
+  }
+  function galGoPhoto() {
+    if (!GAL.ready) { toast('전시관을 준비하고 있어요'); return; }
+    GAL.pos.x = 0; GAL.pos.z = 6.9; GAL.yaw = Math.PI; GAL.pitch = .12;
+    GAL.muteUntil = Date.now() + 6000;
+    if (GAL.avatar) GAL.avatar.rotation.y = Math.PI;
+    toast('📸 포토존! 액자 대신 사진 찍어 보세요');
+  }
+
+  /* ---------- 액자에 작품 걸기 ---------- */
+  function galApply() {
+    if (!GAL.ready) return;
+    var list = galSorted().slice(0, GAL_SLOTS.length);
+    GAL.frames.forEach(function (fr, i) {
+      var it = list[i] || null;
+      var pic = fr.userData.pic, plq = fr.userData.plaque;
+      fr.userData.item = it;
+      if (!it) {
+        if (pic.material !== GAL.emptyMat) { pic.material = GAL.emptyMat; pic.scale.set(1, 1, 1); }
+        if (plq) {
+          if (plq.material.map) plq.material.map.dispose();
+          plq.material.map = galLabelTex('빈 액자', '작품을 걸어 주세요');
+          plq.material.needsUpdate = true;
+          plq.visible = true;
+        }
+        return;
+      }
+      var b = badgeOf(it.badge);
+      var tex = galTexOf(it);
+      if (tex) {
+        pic.material = new THREE.MeshBasicMaterial({ map: tex });
+        var ar = (tex.image && tex.image.width) ? tex.image.width / tex.image.height : GAL_W / GAL_H;
+        var box = GAL_W / GAL_H;
+        if (ar > box) pic.scale.set(1, box / ar, 1);
+        else pic.scale.set(ar / box, 1, 1);
+      }
+      if (plq) {
+        if (plq.material.map) plq.material.map.dispose();
+        plq.material.map = galLabelTex(galClip(it.title || '작품', 16), b.em + ' ' + (it.num || '') + '번 ' + (it.name || ''));
+        plq.material.needsUpdate = true;
+      }
+    });
+  }
+  function galTexOf(it) {
+    if (!it || !it.image) return null;
+    var key = it.id + '|' + it.image.length;
+    if (GAL.tex[key]) return GAL.tex[key];
+    try {
+      var t = new THREE.TextureLoader().load(it.image);
+      if (THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = 2;
+      GAL.tex[key] = t;
+      t.onUpdate = function () { };
+      return t;
+    } catch (e) { gWarn(e); return null; }
+  }
+
+  /* ---------- 목록 / 스트립 ---------- */
+  function renderGallery() {
+    var list = galSorted();
+    var cnt = $('galCount'); if (cnt) cnt.textContent = list.length;
+    var chip = $('galChip'); if (chip) chip.textContent = '🖼 작품 ' + list.length + '점';
+    var strip = $('galStrip');
+    if (strip) {
+      strip.innerHTML = '';
+      if (!list.length) {
+        var e = document.createElement('div'); e.className = 'empty';
+        e.textContent = '아직 전시된 작품이 없어요. 첫 액자의 주인공이 되어 보세요! 🖼';
+        strip.appendChild(e);
+      }
+      list.forEach(function (it) {
+        var t = document.createElement('button');
+        t.className = 't'; t.type = 'button';
+        var im = document.createElement('img');
+        im.src = it.image || ''; im.alt = it.title || '작품'; im.loading = 'lazy';
+        var b = document.createElement('b');
+        b.textContent = '❤ ' + ((it.likedBy || []).length) + ' ' + (it.title || '작품');
+        t.appendChild(im); t.appendChild(b);
+        t.onclick = function () { galCardOpen(it.id); };
+        strip.appendChild(t);
+      });
+    }
+    if (GAL.failed) {
+      var fb = $('galFallback');
+      if (fb) {
+        fb.innerHTML = '';
+        var note = document.createElement('div');
+        note.style.cssText = 'font-size:11.5px;font-weight:800;color:#8a7255;padding:7px 2px 2px';
+        note.textContent = '이 기기에서는 3D 화면을 열 수 없어 2D 전시관으로 보여 드려요. 작품은 그대로 전시됩니다.';
+        fb.appendChild(note);
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:8px 0 2px';
+        if (!list.length) {
+          var em = document.createElement('div');
+          em.style.cssText = 'font-size:12px;color:#8a7255;font-weight:700;padding:8px 2px';
+          em.textContent = '아직 전시된 작품이 없어요.';
+          row.appendChild(em);
+        }
+        list.forEach(function (it) {
+          var c = document.createElement('button');
+          c.type = 'button';
+          c.style.cssText = 'width:calc(50% - 4px);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 16px rgba(16,63,54,.12);border:1px solid rgba(150,110,60,.25)';
+          var im = document.createElement('img');
+          im.src = it.image || ''; im.style.cssText = 'width:100%;height:118px;object-fit:cover;display:block';
+          var cap = document.createElement('div');
+          cap.style.cssText = 'font-size:11px;font-weight:800;padding:7px 8px;text-align:left;line-height:1.35;color:#3f2d16';
+          cap.textContent = (it.title || '작품') + ' · ❤ ' + ((it.likedBy || []).length);
+          c.appendChild(im); c.appendChild(cap);
+          c.onclick = function () { galCardOpen(it.id); };
+          row.appendChild(c);
+        });
+        fb.appendChild(row);
+      }
+    }
+    galApply();
+    if (galOpenId) galFillCard();
+  }
+
+  /* ---------- 작품 카드 ---------- */
+  function galCardOpen(id) {
+    var it = galById(id);
+    if (!it) return;
+    galOpenId = id;
+    GAL.muteUntil = Date.now() + 2500;
+    galFillCard();
+    var c = $('galCard');
+    if (c) c.classList.add('on');
+  }
+  function galCardClose() {
+    galOpenId = null;
+    GAL.muteUntil = Date.now() + 3000;
+    var c = $('galCard');
+    if (c) c.classList.remove('on');
+    var i = $('galCmInput'); if (i) i.value = '';
+  }
+  function galFillCard() {
+    var it = galById(galOpenId);
+    if (!it) { galCardClose(); return; }
+    var b = badgeOf(it.badge);
+    var tEl = $('galCardTitle');
+    if (tEl) {
+      tEl.textContent = it.title || '작품';
+      var who = document.createElement('span');
+      who.className = 'who';
+      who.textContent = b.em + ' ' + (it.num || '') + '번 ' + (it.name || '') + ' · ' + b.name + ' · ' + hhmm(it.ts);
+      tEl.appendChild(who);
+    }
+    var img = $('galCardImg'); if (img) { img.src = it.image || ''; img.alt = it.title || '작품'; }
+    var ds = $('galCardDesc'); if (ds) ds.textContent = it.desc || '';
+    var lk = $('galCardLike');
+    var liked = (it.likedBy || []).indexOf(myUid) >= 0;
+    if (lk) {
+      lk.textContent = '❤️ ' + ((it.likedBy || []).length);
+      lk.classList.toggle('on', liked);
+      lk.onclick = function () { galLike(it, liked); };
+    }
+    var big = $('galCardBig');
+    if (big) big.onclick = function () {
+      openLightbox({ image: it.image, desc: (it.title || '') + (it.desc ? ' · ' + it.desc : ''), num: it.num, name: it.name, badge: it.badge, likedBy: it.likedBy || [] });
+    };
+    var cl = $('galCmCount'); if (cl) cl.textContent = (it.comments || []).length;
+    var box = $('galCmList');
+    if (box) {
+      box.innerHTML = '';
+      var cm = (it.comments || []).slice().sort(function (a, b2) { return (a.ts || 0) - (b2.ts || 0); });
+      if (!cm.length) {
+        var e = document.createElement('div');
+        e.style.cssText = 'font-size:11.5px;color:#7b938c;font-weight:700;padding:4px 0';
+        e.textContent = '첫 댓글을 남겨 보세요 💬';
+        box.appendChild(e);
+      }
+      cm.forEach(function (c) {
+        var d = document.createElement('div'); d.className = 'gal-cm';
+        var bb = badgeOf(c.badge);
+        var n = document.createElement('b');
+        n.textContent = bb.em + ' ' + (c.num || '') + '번 ' + (c.name || '');
+        d.appendChild(n);
+        d.appendChild(document.createTextNode(c.text || ''));
+        box.appendChild(d);
+      });
+    }
+  }
+  function galLike(it, liked) {
+    if (!colGallery) { toast('연결을 기다리는 중이에요'); return; }
+    var FV = firebase.firestore.FieldValue;
+    var upd = liked ? { likedBy: FV.arrayRemove(myUid) } : { likedBy: FV.arrayUnion(myUid) };
+    colGallery.doc(it.id).update(upd).catch(function (e) { handleDbError(e); toast('잠시 뒤 다시 눌러 주세요'); });
+  }
+  function galComment() {
+    var inp = $('galCmInput');
+    if (!inp) return;
+    var txt = (inp.value || '').trim();
+    if (!txt) { inp.focus(); return; }
+    if (!colGallery || !galOpenId) return;
+    var FV = firebase.firestore.FieldValue;
+    var cm = {
+      uid: myUid, num: profile.num, name: profile.name, badge: profile.badge,
+      text: txt.slice(0, 80), ts: Date.now()
+    };
+    inp.value = '';
+    colGallery.doc(galOpenId).update({ comments: FV.arrayUnion(cm) }).catch(function (e) {
+      handleDbError(e); toast('댓글을 남기지 못했어요');
+    });
+  }
+
+  /* ---------- 업로드 ---------- */
+  function galSetPending(data, w, h) {
+    galPending = { data: data, w: w, h: h };
+    var img = $('galPrevImg'); if (img) img.src = data;
+    var wrap = $('galPrevWrap'); if (wrap) wrap.classList.remove('hidden');
+    var tag = $('galSizeTag'); if (tag) tag.textContent = Math.round(data.length * .75 / 1024) + 'KB · ' + w + '×' + h;
+    var tx = $('galUploadTx'); if (tx) tx.textContent = '다른 사진으로 바꾸려면 다시 누르세요';
+    var btn = $('galSubmit'); if (btn) btn.disabled = false;
+  }
+  function galSubmit() {
+    if (!galPending) { toast('사진을 먼저 골라 주세요'); return; }
+    if (!colGallery) { toast('연결을 기다리는 중이에요'); return; }
+    var title = ($('galTitle').value || '').trim().slice(0, 30);
+    var desc = ($('galDesc').value || '').trim().slice(0, 60);
+    if (!title) { toast('작품 제목을 적어 주세요 🖼'); $('galTitle').focus(); return; }
+    var btn = $('galSubmit'); if (btn) btn.disabled = true;
+    colGallery.add({
+      userId: myUid, num: profile.num, name: profile.name, badge: profile.badge,
+      title: title, desc: desc, image: galPending.data,
+      likedBy: [myUid], comments: [], ts: Date.now()
+    }).then(function () {
+      toast('액자에 작품을 걸었어요! 친구들이 ❤️ 눌러 줄 거예요');
+      galPending = null;
+      var wrap = $('galPrevWrap'); if (wrap) wrap.classList.add('hidden');
+      $('galTitle').value = ''; $('galDesc').value = '';
+      var tx = $('galUploadTx'); if (tx) tx.textContent = '사진 찍거나 골라서 액자에 걸기';
+      if (GAL.ready) { GAL.pos.x = 0; GAL.pos.z = -6.2; GAL.yaw = Math.PI; }
+      var stage = $('galStage');
+      if (stage && stage.scrollIntoView) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }).catch(function (e) {
+      handleDbError(e);
+      if (btn) btn.disabled = false;
+    });
+  }
+
+  /* ---------- 스테이지 조작 ---------- */
+  function galBindStage() {
+    if (!GAL.ready || GAL.stageBound) return;
+    GAL.stageBound = true;
+    var st = $('galStage');
+    var cv = GAL.renderer.domElement;
+    var drag = null, moved = 0;
+
+    function pt(e) {
+      var t = (e.touches && e.touches[0]) || e;
+      return { x: t.clientX, y: t.clientY };
+    }
+    cv.addEventListener('pointerdown', function (e) {
+      drag = pt(e); moved = 0;
+      cv.setPointerCapture && cv.setPointerCapture(e.pointerId);
+    });
+    cv.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      var p = pt(e);
+      var dx = p.x - drag.x, dy = p.y - drag.y;
+      moved += Math.abs(dx) + Math.abs(dy);
+      GAL.yaw -= dx * .006;
+      GAL.pitch = Math.max(-.22, Math.min(.85, GAL.pitch + dy * .004));
+      drag = p;
+    });
+    cv.addEventListener('pointerup', function (e) {
+      var wasDrag = moved > 14;
+      drag = null;
+      if (wasDrag) return;
+      galPickAt(e.clientX, e.clientY);
+    });
+    cv.addEventListener('pointercancel', function () { drag = null; });
+
+    /* 조이스틱 */
+    var joy = $('galJoy'), knob = $('galJoyKnob');
+    if (joy && knob) {
+      var jid = null, cx = 0, cy = 0, R = 34;
+      joy.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        var r = joy.getBoundingClientRect();
+        cx = r.left + r.width / 2; cy = r.top + r.height / 2;
+        jid = e.pointerId;
+        joy.setPointerCapture && joy.setPointerCapture(e.pointerId);
+        moveJoy(e.clientX, e.clientY);
+      });
+      joy.addEventListener('pointermove', function (e) {
+        if (jid === null || e.pointerId !== jid) return;
+        e.preventDefault();
+        moveJoy(e.clientX, e.clientY);
+      });
+      function endJoy(e) {
+        if (jid !== null && e.pointerId !== jid) return;
+        jid = null; GAL.joy = null;
+        knob.style.transform = 'translate(0px,0px)';
+      }
+      joy.addEventListener('pointerup', endJoy);
+      joy.addEventListener('pointercancel', endJoy);
+      function moveJoy(x, y) {
+        var dx = x - cx, dy = y - cy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d > R) { dx = dx / d * R; dy = dy / d * R; }
+        knob.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+        GAL.joy = { x: dx / R, y: -dy / R };
+      }
+    }
+    window.addEventListener('resize', function () { if (GAL.shown) galResize(); });
+    document.addEventListener('keydown', function (e) {
+      if (!GAL.shown || !GAL.ready) return;
+      var tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      var k = (e.key || '').toLowerCase();
+      if (k === 'escape') { galCardClose(); return; }
+      if (k === 'e' || k === 'enter') {
+        if (GAL.near) { galCardOpen(GAL.near.id); e.preventDefault(); }
+        return;
+      }
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].indexOf(k) >= 0) {
+        GAL.keys[k] = true; e.preventDefault();
+      }
+    });
+    document.addEventListener('keyup', function (e) {
+      var k = (e.key || '').toLowerCase();
+      if (GAL.keys[k]) GAL.keys[k] = false;
+    });
+  }
+  function galPickAt(x, y) {
+    if (!GAL.ready) return;
+    var st = $('galStage');
+    if (!st) return;
+    var r = st.getBoundingClientRect();
+    var nx = ((x - r.left) / r.width) * 2 - 1;
+    var ny = -((y - r.top) / r.height) * 2 + 1;
+    var rc = new THREE.Raycaster();
+    rc.setFromCamera(new THREE.Vector2(nx, ny), GAL.camera);
+    var hits = rc.intersectObjects(GAL.pick, false);
+    for (var i = 0; i < hits.length; i++) {
+      var fr = hits[i].object.userData.frame;
+      if (fr && fr.userData.item) { galCardOpen(fr.userData.item.id); return; }
+    }
+  }
+
+  /* ---------- 탭 전환 / 프레즌스 ---------- */
+  function galShow() {
+    GAL.shown = true;
+    GAL.keys = {};
+    if (GAL.ready) {
+      galResize();
+      if (!GAL.raf) GAL.raf = requestAnimationFrame(galTick);
+    } else {
+      galInit();
+    }
+    startPresence();
+    postPresence();
+  }
+  function galHide() {
+    GAL.shown = false;
+    if (GAL.raf) { cancelAnimationFrame(GAL.raf); GAL.raf = 0; }
+    GAL.joy = null;
+    if (GAL.presTimer) { clearInterval(GAL.presTimer); GAL.presTimer = null; }
+  }
+  function postPresence() {
+    if (!colPresence || !profile) return;
+    try {
+      colPresence.doc(myUid).set({
+        num: profile.num, name: profile.name, badge: profile.badge,
+        x: Math.round(GAL.pos.x * 100) / 100, z: Math.round(GAL.pos.z * 100) / 100,
+        yaw: Math.round(GAL.yaw * 100) / 100, ts: Date.now()
+      }, { merge: true }).catch(gWarn);
+    } catch (e) { gWarn(e); }
+  }
+  function startPresence() {
+    if (!colPresence || GAL.presTimer) return;
+    GAL.presTimer = setInterval(function () { if (GAL.shown) postPresence(); }, 2500);
+  }
+
+  /* ---------- 이벤트 묶기 ---------- */
+  function galBindUI() {
+    on($('galZone'), 'click', function () { $('galFile').click(); });
+    on($('galFile'), 'change', function (e) {
+      var f = e.target.files && e.target.files[0];
+      if (!f) return;
+      if (f.size > 12 * 1024 * 1024) { toast('사진이 너무 커요(12MB 이하). 화면 캡처본을 써 보세요.'); return; }
+      var tx = $('galUploadTx'); if (tx) tx.textContent = '사진 준비 중…';
+      compressImage(f, function (data, w, h) { galSetPending(data, w, h); });
+      e.target.value = '';
+    });
+    on($('galSubmit'), 'click', galSubmit);
+    on($('galPhoto'), 'click', galGoPhoto);
+    on($('galAct'), 'click', function () { if (GAL.near) galCardOpen(GAL.near.id); });
+    on($('galCardClose'), 'click', galCardClose);
+    on($('galCard'), 'click', function (e) { if (e.target.id === 'galCard') galCardClose(); });
+    on($('galCmSend'), 'click', galComment);
+    on($('galCmInput'), 'keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); galComment(); } });
+  }
+  galBindUI();
 
   /* ================= 시작 ================= */
   function boot() {
