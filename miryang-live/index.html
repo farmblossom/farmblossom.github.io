@@ -4196,7 +4196,7 @@ var qrcode = function() {
     loading: false, ready: false, failed: false,
     renderer: null, scene: null, camera: null, clock: null,
     frames: [], pick: [], avatar: null, others: {}, tex: {},
-    pos: { x: 0, z: 6.4 }, yaw: Math.PI, pitch: 0.2, keys: {}, joy: null,
+    pos: { x: 0, z: 2.2 }, yaw: 0, pitch: 0.2, keys: {}, joy: null,
     near: null, lastAutoId: '', lastAuto: 0, muteUntil: 0, raf: 0, shown: false, presTimer: null, players: {}
   };
   var GAL_W = 3.0, GAL_H = 2.25;
@@ -4371,7 +4371,7 @@ var qrcode = function() {
       map: galLabelTex(b.em + ' ' + (num || '') + '번', name || '', 'rgba(255,255,255,.92)'),
       transparent: true, depthTest: false
     }));
-    lab.position.set(0, 2.16, 0); lab.scale.set(2.1, 0.69, 1);
+    lab.position.set(0, 2.34, 0); lab.scale.set(1.9, 0.62, 1);
     g.add(body); g.add(head); g.add(e1); g.add(e2); g.add(a1); g.add(a2); g.add(lab);
     return g;
   }
@@ -4605,8 +4605,8 @@ var qrcode = function() {
   }
   function galEnter(force) {
     if (!profile) return;
-    GAL.pos.x = 0; GAL.pos.z = 6.4; GAL.yaw = Math.PI; GAL.pitch = .2;
-    if (GAL.avatar) { GAL.avatar.position.set(0, 0, 6.4); }
+    GAL.pos.x = 0; GAL.pos.z = 2.2; GAL.yaw = 0; GAL.pitch = .2;
+    if (GAL.avatar) { GAL.avatar.position.set(0, 0, 2.2); }
     if (GAL.ready) {
       GAL.camera.position.set(0, 3.3, .4);
       galResize();
