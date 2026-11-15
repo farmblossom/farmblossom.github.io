@@ -527,12 +527,12 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
         </div>
       </div>
 
-      <div class="card video-card" style="margin-top:12px">
+      <div class="card video-card hidden" id="videoCard" style="margin-top:12px">
         <div class="video-head">
           <div class="tb-logo" style="background:linear-gradient(135deg,#ef4444,#f59e0b);width:30px;height:30px;font-size:15px">🎬</div>
           <div class="t">
-            <b id="videoLabel">🎬 쌤의 반전 본업 브이로그 🚜</b>
-            <span>오늘의 수업 영상 · 선생님이 실시간으로 바꿀 수 있어요</span>
+            <b id="videoLabel">🎬 오늘의 수업 영상</b>
+            <span>선생님이 수업 자료 영상을 켜면 여기에 보여요</span>
           </div>
         </div>
         <div class="frame short" id="videoFrame"></div>
@@ -601,10 +601,11 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
         <div class="gal-hud">
           <span class="gal-chip" id="galChip">🖼 작품 0점</span>
           <span class="gal-chip" id="galChip2">💬 댓글 0</span>
+          <span class="gal-chip" id="galChip3" title="지금 전시관에 있는 친구">👥 0명</span>
           <span class="gl-sp"></span>
           <button class="btn small ghost" id="galPhoto">📸 포토존 가기</button>
         </div>
-        <div class="gal-tip" id="galTip">드래그 = 둘러보기 · WASD/방향키 = 이동 · 액자를 콕 누르면 작품 카드</div>
+        <div class="gal-tip" id="galTip">드래그=둘러보기 · 조이스틱=이동 · 친구 아바타가 실시간으로 보여요</div>
         <div class="gal-joy" id="galJoy"><span id="galJoyKnob"></span></div>
         <button class="gal-act hidden" id="galAct">👀 작품 보기</button>
       </div>
@@ -671,17 +672,17 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
       <button class="switch" id="lockSwitch" role="switch" aria-checked="false"></button>
     </div>
 
-    <h4>🎬 오늘의 수업 영상</h4>
+    <h4>🎬 오늘의 수업 영상 <small style="font-weight:800;color:#7b938c">기본은 꺼짐</small></h4>
     <div class="trow" style="display:block">
       <div class="pin-form" style="margin-top:0">
-        <input id="videoInput" type="text" placeholder="유튜브 링크 붙여넣기 (watch / shorts / youtu.be)">
+        <input id="videoInput" type="text" placeholder="수업용 유튜브 링크 (비우면 영상 영역 숨김)">
       </div>
       <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
         <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#3f5a52">
           <input type="checkbox" id="videoShort" style="width:16px;height:16px;accent-color:#0d9488"> 세로 영상(Shorts)
         </label>
         <div style="flex:1"></div>
-        <button class="btn small" id="videoReset">기본값</button>
+        <button class="btn small" id="videoReset">영상 끄기</button>
         <button class="btn primary small" id="videoSave">저장·반영</button>
       </div>
     </div>
@@ -3104,7 +3105,9 @@ var qrcode = function() {
   };
   var DEFAULT_ROOM = 'miryang-ai';
   var TEACHER_PIN = '0619';
-  var DEFAULT_VIDEO = { id: 'X8ZRO3cFeQ4', label: '🎬 쌤의 반전 본업 브이로그 🚜', type: 'short' };
+  /* 기본 영상 없음 — 선생님이 교사 모드에서 수업용 링크를 넣을 때만 보인다 */
+  var DEFAULT_VIDEO = { id: '', label: '', type: 'short' };
+  var BLOCKED_VIDEOS = { X8ZRO3cFeQ4: 1 };  // 예전에 기본값으로 박혀 있던 개인 영상은 어떤 경로로 와도 숨긴다
   var MAX_CHAT = 200, MAX_DESC = 60, MAX_REFL = 120;
 
   var BADGES = [
@@ -3279,9 +3282,9 @@ var qrcode = function() {
       meta = {
         chatLocked: !!d.chatLocked,
         quizTitle: d.quizTitle || '',
-        videoId: d.videoId || DEFAULT_VIDEO.id,
-        videoLabel: d.videoLabel || DEFAULT_VIDEO.label,
-        videoType: d.videoType || DEFAULT_VIDEO.type
+        videoId: d.videoId || '',
+        videoLabel: d.videoLabel || '',
+        videoType: d.videoType || 'short'
       };
       renderMeta(); renderVideo();
     }, handleDbError);
@@ -3305,7 +3308,10 @@ var qrcode = function() {
       renderRefl(); renderCounts();
     }, handleDbError);
 
-    colSignal.onSnapshot(function (snap) {
+    /* signals 중 SOS/완료 문서만 구독한다.
+       (전시관 위치 공유 문서 'gallery'는 state 필드가 없어 이 쿼리에 안 들어온다
+        → 친구들이 움직여도 구독 중인 학생들에게 읽기 요금이 붙지 않는다) */
+    colSignal.where('state', 'in', ['sos', 'done']).onSnapshot(function (snap) {
       markOk();
       signals = {};
       snap.docs.forEach(function (d) { var v = d.data(); v.id = d.id; signals[d.id] = v; });
@@ -3394,11 +3400,29 @@ var qrcode = function() {
   }
 
   /* ================= 렌더: 영상 ================= */
+  function liveVideoId() {
+    var v = (meta.videoId || '').trim();
+    if (!v || BLOCKED_VIDEOS[v]) return '';
+    return v;
+  }
+
   function renderVideo() {
-    var vid = meta.videoId || DEFAULT_VIDEO.id;
-    var label = meta.videoLabel || DEFAULT_VIDEO.label;
+    var card = $('videoCard'), frame0 = $('videoFrame');
+    var vid = liveVideoId();
+    if (!vid) {
+      /* 기본 상태: 영상 영역을 아예 감춤 */
+      if (card) card.classList.add('hidden');
+      if (frame0) { frame0.innerHTML = ''; delete frame0.dataset.vid; }
+      if (isTeacher && $('videoInput') && document.activeElement !== $('videoInput')) {
+        $('videoInput').value = '';
+        if ($('videoShort')) $('videoShort').checked = (meta.videoType !== 'wide');
+      }
+      return;
+    }
+    if (card) card.classList.remove('hidden');
+    var label = (meta.videoLabel || '').replace(/^🎬\s*/, '').trim() || '오늘의 수업 영상';
     var type = meta.videoType === 'wide' ? 'wide' : 'short';
-    $('videoLabel').textContent = '🎬 ' + label.replace(/^🎬\s*/, '');
+    $('videoLabel').textContent = '🎬 ' + label;
     var frame = $('videoFrame');
     frame.className = 'frame ' + type;
     var src = 'https://www.youtube.com/embed/' + vid + '?rel=0&modestbranding=1&playsinline=1';
@@ -3949,22 +3973,22 @@ var qrcode = function() {
     var p = parseYT(raw);
     if (!p && raw) { toast('유튜브 링크를 알아볼 수 없어요. 주소를 다시 확인해 주세요.'); return; }
     var type = $('videoShort').checked ? 'short' : 'wide';
-    if (!raw) { toast('링크를 붙여넣어 주세요'); return; }
+    if (!raw) { clearVideo(); return; }
     colMeta.set({
       videoId: p.id,
       videoType: type,
-      videoLabel: meta.videoLabel || DEFAULT_VIDEO.label,
+      videoLabel: '',
       updatedAt: Date.now()
-    }, { merge: true }).then(function () { toast('수업 영상을 바꿨어요 🎬 학생 화면에 바로 반영됩니다'); })
+    }, { merge: true }).then(function () { toast('수업 영상을 켰어요 🎬 학생 화면에 바로 반영됩니다'); })
       .catch(function (e) { handleDbError(e); });
   }
-  function resetVideo() {
+  function clearVideo() {
     colMeta.set({
-      videoId: DEFAULT_VIDEO.id, videoType: DEFAULT_VIDEO.type,
-      videoLabel: DEFAULT_VIDEO.label, updatedAt: Date.now()
-    }, { merge: true }).then(function () { toast('기본 영상으로 되돌렸어요'); })
+      videoId: '', videoLabel: '', videoType: 'short', updatedAt: Date.now()
+    }, { merge: true }).then(function () { toast('영상 영역을 껐어요 (기본은 꺼진 상태)'); })
       .catch(function (e) { handleDbError(e); });
   }
+  function resetVideo() { clearVideo(); }
 
   /* ================= 내보내기 ================= */
   function head(title) {
@@ -4197,8 +4221,15 @@ var qrcode = function() {
     renderer: null, scene: null, camera: null, clock: null,
     frames: [], pick: [], avatar: null, others: {}, tex: {},
     pos: { x: 0, z: 2.2 }, yaw: 0, pitch: 0.2, keys: {}, joy: null,
-    near: null, lastAutoId: '', lastAuto: 0, muteUntil: 0, raf: 0, shown: false, presTimer: null, players: {}
+    near: null, lastAutoId: '', lastAuto: 0, muteUntil: 0, raf: 0, shown: false, presTimer: null, players: {},
+    lastMove: 0, presSentAt: 0, presPollAt: 0, presBusy: false, waveTex: null
   };
+  /* 친구 아바타 동기화 간격 (Firestore 무료(Spark) 한도 보호를 위해 조절 가능)
+     - 이동 중: 이 간격으로 위치 전송 (부드러움은 받는 쪽 보간이 채움)
+     - 서 있는 중: 하트비트
+     - 위치 조회: 이 간격으로 한 번 읽기(문서 1개 = 1읽기)
+     - 이 시간 넘게 움직임이 없는 친구는 화면에서 사라짐 */
+  var GAL_SEND_MOVE = 650, GAL_SEND_IDLE = 6000, GAL_POLL = 1600, GAL_STALE = 20000;
   var GAL_W = 3.0, GAL_H = 2.25;
   var GAL_SLOTS = [
     { x: -7.2, y: 3.55, z: -8.86, ry: 0 },
@@ -4376,6 +4407,122 @@ var qrcode = function() {
     return g;
   }
 
+  /* ---------- 친구 아바타 실시간 동시 표시 ("우르르 서로 만나기") ----------
+     signals 컬렉션의 'gallery' 문서 하나에 모두의 위치를 모아 둔다.
+     - 쓰기: 내 칸만 set(merge) → 서로 덮어쓰지 않음
+     - 읽기: 전시관을 보고 있을 때만 1.6초마다 문서 1개 조회(=1읽기)
+     - SOS/완료 구독은 state 필드가 있는 문서만 보므로 이 문서 변경에 읽기 요금이 안 붙는다 */
+  function galWaveTex() {
+    if (GAL.waveTex) return GAL.waveTex;
+    var c = document.createElement('canvas'); c.width = 128; c.height = 128;
+    var x = c.getContext('2d');
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.font = '86px system-ui,"Noto Color Emoji","Apple Color Emoji",sans-serif';
+    x.fillText('👋', 64, 68);
+    GAL.waveTex = galCanvasTex(c);
+    return GAL.waveTex;
+  }
+
+  function galPresenceDoc() { return colSignal ? colSignal.doc('gallery') : null; }
+
+  function galChipUpdate() {
+    var el = $('galChip3');
+    if (!el) return;
+    el.textContent = '👥 ' + Object.keys(GAL.players).length + '명';
+  }
+
+  function galPresenceSend(force) {
+    if (!GAL.shown || !profile || !colSignal) return;
+    var now = Date.now();
+    var moving = (now - (GAL.lastMove || 0)) < 260;
+    var gap = moving ? GAL_SEND_MOVE : GAL_SEND_IDLE;
+    if (!force && now - GAL.presSentAt < gap) return;
+    GAL.presSentAt = now;
+    var yaw = GAL.avatar ? GAL.avatar.rotation.y : GAL.yaw;
+    var p = {};
+    p[myUid] = {
+      n: profile.num || '', m: profile.name || '', b: profile.badge || 'turtle',
+      x: Math.round(GAL.pos.x * 100) / 100,
+      z: Math.round(GAL.pos.z * 100) / 100,
+      y: Math.round(yaw * 100) / 100,
+      t: now
+    };
+    galPresenceDoc().set({ userId: 'gallery', kind: 'gallery', updatedAt: now, p: p }, { merge: true })
+      .catch(function (e) { if (!GAL.presErr) { GAL.presErr = true; gWarn(e); } });
+  }
+
+  function galPresenceLeave() {
+    if (!colSignal || !myUid) return;
+    try {
+      var u = {};
+      u['p.' + myUid] = firebase.firestore.FieldValue.delete();
+      colSignal.doc('gallery').update(u).catch(function () {});
+    } catch (e) {}
+  }
+
+  function galPresencePoll() {
+    if (!GAL.shown || !colSignal) return;
+    galPresenceDoc().get().then(function (d) {
+      if (d.exists) galPresenceApply((d.data() || {}).p || {});
+    }).catch(function (e) { gWarn(e); });
+  }
+
+  function galPresenceApply(map) {
+    if (!GAL.ready || !GAL.scene || !window.THREE) { GAL.presPending = map; return; }
+    var now = Date.now(), seen = {};
+    Object.keys(map).forEach(function (uid) {
+      if (!uid || uid === myUid) return;
+      var e = map[uid];
+      if (!e || typeof e.x !== 'number' || typeof e.z !== 'number') return;
+      if (!e.t || now - e.t > GAL_STALE) return;
+      seen[uid] = 1;
+      var pl = GAL.players[uid];
+      if (!pl) {
+        var g = galMakeAvatar(e.b, e.n, e.m);
+        g.position.set(e.x, 0, e.z);
+        g.rotation.y = e.y || 0;
+        var hi = new THREE.Sprite(new THREE.SpriteMaterial({ map: galWaveTex(), transparent: true, depthTest: false }));
+        hi.position.set(0, 3.0, 0); hi.scale.set(.9, .9, 1); hi.visible = false;
+        g.add(hi);
+        GAL.scene.add(g);
+        pl = GAL.players[uid] = { mesh: g, hi: hi, tx: e.x, tz: e.z, ty: e.y || 0, walkT: 0 };
+      }
+      pl.tx = e.x; pl.tz = e.z; pl.ty = e.y || 0;
+    });
+    Object.keys(GAL.players).forEach(function (uid) {
+      if (seen[uid]) return;
+      var pl = GAL.players[uid];
+      if (pl && pl.mesh && GAL.scene) GAL.scene.remove(pl.mesh);
+      delete GAL.players[uid];
+    });
+    galChipUpdate();
+  }
+
+  function galPresenceTick(dt) {
+    var k = Math.min(1, dt * 7);
+    Object.keys(GAL.players).forEach(function (uid) {
+      var pl = GAL.players[uid], m = pl.mesh;
+      if (!m) return;
+      var dx = pl.tx - m.position.x, dz = pl.tz - m.position.z;
+      var d = Math.sqrt(dx * dx + dz * dz);
+      if (d > .01) {
+        m.position.x += dx * k;
+        m.position.z += dz * k;
+        var want = (d > .2) ? Math.atan2(dx, dz) : (pl.ty || 0);
+        var cur = m.rotation.y;
+        var diff = ((want - cur + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
+        m.rotation.y = cur + diff * Math.min(1, dt * 9);
+      }
+      if (d > .04) pl.walkT = (pl.walkT || 0) + dt * 9;
+      else pl.walkT = (pl.walkT || 0) * .9;
+      m.position.y = Math.abs(Math.sin(pl.walkT || 0)) * .07;
+      if (pl.hi) {
+        var hx = m.position.x - GAL.pos.x, hz = m.position.z - GAL.pos.z;
+        pl.hi.visible = (hx * hx + hz * hz) < 3.24;   /* 1.8m 안으로 오면 손 흔들기 */
+      }
+    });
+  }
+
   /* ---------- 방 만들기 ---------- */
   function galBuildRoom() {
     var sc = new THREE.Scene();
@@ -4472,6 +4619,7 @@ var qrcode = function() {
     var me = galMakeAvatar(profile.badge, profile.num, profile.name);
     me.position.set(GAL.pos.x, 0, GAL.pos.z);
     GAL.avatar = me; sc.add(me);
+    galChipUpdate();
   }
 
   /* ---------- 렌더 / 루프 ---------- */
@@ -4508,6 +4656,7 @@ var qrcode = function() {
         GAL.avatar.rotation.y = Math.atan2(dx, dz);
       }
       GAL.walkT = (GAL.walkT || 0) + dt * 9;
+      GAL.lastMove = Date.now();
     } else {
       GAL.walkT = (GAL.walkT || 0) * .92;
     }
@@ -4516,6 +4665,11 @@ var qrcode = function() {
       GAL.avatar.position.z = GAL.pos.z;
       GAL.avatar.position.y = Math.abs(Math.sin(GAL.walkT || 0)) * .07;
     }
+
+    /* 친구들 아바타 이동 · 내 위치 전송 · 위치 받아 오기 */
+    galPresenceTick(dt);
+    galPresenceSend(false);
+    if (Date.now() - GAL.presPollAt > GAL_POLL) { GAL.presPollAt = Date.now(); galPresencePoll(); }
 
     var dist = 6.0, hor = Math.cos(GAL.pitch) * dist;
     var tx = GAL.pos.x + Math.sin(GAL.yaw) * hor;
@@ -4584,6 +4738,7 @@ var qrcode = function() {
         galResize();
         galStartLoop();
         galBindStage();
+        if (GAL.presPending) galPresenceApply(GAL.presPending);
       } catch (e) {
         gWarn(e);
         galFallback();
@@ -4959,6 +5114,9 @@ var qrcode = function() {
   function galShow() {
     GAL.shown = true;
     GAL.keys = {};
+    GAL.presSentAt = 0; GAL.presPollAt = 0;
+    galPresenceSend(true);
+    galPresencePoll();
     if (GAL.ready) {
       galResize();
       if (!GAL.raf) GAL.raf = requestAnimationFrame(galTick);
@@ -4967,6 +5125,7 @@ var qrcode = function() {
     }
   }
   function galHide() {
+    if (GAL.shown) galPresenceLeave();
     GAL.shown = false;
     if (GAL.raf) { cancelAnimationFrame(GAL.raf); GAL.raf = 0; }
     GAL.joy = null;
