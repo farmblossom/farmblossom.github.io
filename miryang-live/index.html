@@ -600,7 +600,7 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
         <div class="gal-veil" id="galVeil">🏛️ 전시관을 짓고 있어요…<br><span style="font-weight:700;opacity:.8">잠시만 기다려 주세요</span></div>
         <div class="gal-hud">
           <span class="gal-chip" id="galChip">🖼 작품 0점</span>
-          <span class="gal-chip" id="galChip2">👥 1명</span>
+          <span class="gal-chip" id="galChip2">💬 댓글 0</span>
           <span class="gl-sp"></span>
           <button class="btn small ghost" id="galPhoto">📸 포토존 가기</button>
         </div>
@@ -631,6 +631,7 @@ nav.tabbar button.on{color:#0b6f63;background:linear-gradient(135deg,rgba(20,184
           <input id="galDesc" type="text" maxlength="60" placeholder="예) 터틀 코딩으로 그린 하트 주행">
         </div>
         <button class="btn primary" id="galSubmit" style="width:100%" disabled>액자에 걸기 🏛️</button>
+        <div class="entry-note" style="margin-top:8px;text-align:left;font-size:11px">액자에 건 작품은 <b>🏆 작품·투표</b> 탭에도 함께 올라가요. 친구 작품에는 ❤️와 💬 댓글을 남길 수 있어요.</div>
       </div>
 
       <div class="sec-title"><span class="dot"></span>지금 전시 중 <span class="pill" id="galCount">0</span></div>
@@ -3267,8 +3268,6 @@ var qrcode = function() {
       colWork = colMeta.collection('works');
       colRefl = colMeta.collection('reflections');
       colSignal = colMeta.collection('signals');
-      colGallery = colMeta.collection('gallery');
-      colPresence = colMeta.collection('presence');
       return true;
     } catch (e) { handleDbError(e); return false; }
   }
@@ -3290,14 +3289,14 @@ var qrcode = function() {
     colMsg.orderBy('ts', 'asc').limitToLast(300).onSnapshot(function (snap) {
       markOk();
       messages = snap.docs.map(function (d) { var v = d.data(); v.id = d.id; return v; });
-      renderChat(); renderPins(); renderCounts();
+      renderChat(); renderPins(); renderCounts(); renderGallery();
       if (isTeacher) renderTeacherPins();
     }, handleDbError);
 
     colWork.orderBy('ts', 'desc').limit(60).onSnapshot(function (snap) {
       markOk();
       works = snap.docs.map(function (d) { var v = d.data(); v.id = d.id; return v; });
-      renderWorks(); renderCounts();
+      renderWorks(); renderCounts(); renderGallery();
     }, handleDbError);
 
     colRefl.orderBy('ts', 'desc').limit(100).onSnapshot(function (snap) {
@@ -3314,18 +3313,6 @@ var qrcode = function() {
       if (isTeacher) renderTeacherSignals();
     }, handleDbError);
 
-    colGallery.onSnapshot(function (snap) {
-      galItems = snap.docs.map(function (d) { var v = d.data(); v.id = d.id; return v; });
-      renderGallery();
-    }, gWarn);
-
-    colPresence.onSnapshot(function (snap) {
-      GAL.players = {};
-      snap.docs.forEach(function (d) {
-        if (d.id === myUid) return;
-        GAL.players[d.id] = d.data();
-      });
-    }, gWarn);
   }
 
   /* ================= 입장 ================= */
@@ -3453,7 +3440,7 @@ var qrcode = function() {
       e.innerHTML = '아직 대화가 없어요. 첫 질문을 남겨 보세요! 💬';
       list.appendChild(e);
     }
-    messages.forEach(function (m) {
+    chatMsgs().forEach(function (m) {
       var wrap = document.createElement('div');
       var mine = m.userId && m.userId === myUid;
       wrap.className = 'msg' + (mine ? ' mine' : '') + (m.pinned ? ' pinned' : '');
@@ -3482,7 +3469,7 @@ var qrcode = function() {
       list.appendChild(wrap);
     });
     if (atBottom) list.scrollTop = list.scrollHeight;
-    $('chatCount').textContent = messages.length;
+    $('chatCount').textContent = chatMsgs().length;
   }
 
   function togglePin(m) {
@@ -3539,7 +3526,7 @@ var qrcode = function() {
   }
 
   function renderCounts() {
-    $('workCount').textContent = works.length;
+    $('workCount').textContent = galWorks().length;
   }
 
   /* ================= 렌더: 신호 ================= */
@@ -3615,7 +3602,7 @@ var qrcode = function() {
   function renderWorks() {
     var grid = $('workGrid');
     grid.innerHTML = '';
-    var arr = works.slice();
+    var arr = galWorks();
     if (sortMode === 'like') {
       arr.sort(function (a, b) {
         var d = ((b.likedBy || []).length) - ((a.likedBy || []).length);
@@ -3638,7 +3625,8 @@ var qrcode = function() {
       var mt = document.createElement('div'); mt.className = 'meta';
       var who = document.createElement('div'); who.className = 'who';
       who.textContent = b.em + ' ' + (w.num || '') + '번 ' + (w.name || '');
-      var desc = document.createElement('div'); desc.className = 'desc'; desc.textContent = w.desc || '';
+      var desc = document.createElement('div'); desc.className = 'desc';
+      desc.textContent = (w.title ? w.title + ' — ' : '') + (w.desc || '');
       var foot = document.createElement('div'); foot.className = 'foot';
       var liked = (w.likedBy || []).indexOf(myUid) >= 0;
       var hb = document.createElement('button');
@@ -3990,8 +3978,8 @@ var qrcode = function() {
     return lines.join('\n');
   }
   function chatTxt() {
-    var out = head('질문 & 톡 (' + messages.length + '개)');
-    messages.forEach(function (m) {
+    var out = head('질문 & 톡 (' + chatMsgs().length + '개)');
+    chatMsgs().forEach(function (m) {
       var b = badgeOf(m.badge);
       out += '[' + hhmm(m.ts) + '] ' + (m.num || '') + '번 ' + (m.name || '') + ' ' + b.em + b.name +
         (m.pinned ? ' 📌' : '') + '\n  ' + (m.text || '') + '\n';
@@ -3999,8 +3987,8 @@ var qrcode = function() {
     return out;
   }
   function worksTxt() {
-    var out = head('작품 & 투표 (' + works.length + '개)');
-    works.slice().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); }).forEach(function (w) {
+    var out = head('작품 & 투표 (' + galWorks().length + '개)');
+    galWorks().sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); }).forEach(function (w) {
       var b = badgeOf(w.badge);
       out += '[' + hhmm(w.ts) + '] ' + (w.num || '') + '번 ' + (w.name || '') + ' ' + b.em + b.name +
         ' · ❤ ' + ((w.likedBy || []).length) + '\n  설명: ' + (w.desc || '') +
@@ -4020,7 +4008,7 @@ var qrcode = function() {
     var pins = pinnedList();
     var sos = signalArr('sos'), done = signalArr('done');
     var people = {};
-    messages.concat(works, reflections).forEach(function (x) {
+    chatMsgs().concat(galWorks(), reflections).forEach(function (x) {
       var k = (x.num || '') + (x.name || '');
       if (k) people[k] = x;
     });
@@ -4203,8 +4191,7 @@ var qrcode = function() {
   }
 
   /* ================= 🏛️ 3D 메타버스 전시관 ================= */
-  var colGallery = null, colPresence = null;
-  var galItems = [], galPending = null, galOpenId = null;
+  var galPending = null, galOpenId = null;
   var GAL = {
     loading: false, ready: false, failed: false,
     renderer: null, scene: null, camera: null, clock: null,
@@ -4229,12 +4216,42 @@ var qrcode = function() {
   function gWarn(e) { try { console.warn('[GALLERY]', e && (e.code || e.message) || e); } catch (x) {} }
   function galEsc(s) { return String(s == null ? '' : s); }
   function galClip(s, n) { s = galEsc(s); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+  function galWorks() {
+    var out = [];
+    for (var i = 0; i < works.length; i++) {
+      var w = works[i];
+      if (w && w.kind !== 'cmt' && w.image) out.push(w);
+    }
+    return out;
+  }
   function galSorted() {
-    return galItems.slice().sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+    return galWorks().sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
   }
   function galById(id) {
-    for (var i = 0; i < galItems.length; i++) if (galItems[i].id === id) return galItems[i];
+    var list = galWorks();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
     return null;
+  }
+  function galCmtsOf(id) {
+    var out = [];
+    for (var i = 0; i < messages.length; i++) {
+      var m = messages[i];
+      if (m && m.kind === 'artcmt' && m.workId === id) out.push(m);
+    }
+    return out.sort(function (a, b) { return (a.ts || 0) - (b.ts || 0); });
+  }
+  function galCmtAll() {
+    var n = 0;
+    for (var i = 0; i < messages.length; i++) if (messages[i] && messages[i].kind === 'artcmt') n++;
+    return n;
+  }
+  function chatMsgs() {
+    var out = [];
+    for (var i = 0; i < messages.length; i++) {
+      var m = messages[i];
+      if (m && m.kind !== 'artcmt') out.push(m);
+    }
+    return out;
   }
 
   /* ---------- 3D 라이브러리 로드 ---------- */
@@ -4535,36 +4552,8 @@ var qrcode = function() {
       if (bt) bt.classList.add('hidden');
     }
 
-    galDrawOthers();
     GAL.renderer.render(GAL.scene, GAL.camera);
   }
-  function galDrawOthers() {
-    if (!GAL.ready) return;
-    var now = Date.now();
-    Object.keys(GAL.players || {}).forEach(function (uid) {
-      if (uid === myUid) return;
-      var p = GAL.players[uid];
-      if (!p || now - (p.ts || 0) > 45000 || typeof p.x !== 'number') {
-        if (GAL.others[uid]) { GAL.scene.remove(GAL.others[uid]); delete GAL.others[uid]; }
-        return;
-      }
-      var o = GAL.others[uid];
-      if (!o || o.userData.badge !== p.badge) {
-        if (o) GAL.scene.remove(o);
-        o = galMakeAvatar(p.badge, p.num, p.name);
-        o.userData.badge = p.badge;
-        GAL.others[uid] = o; GAL.scene.add(o);
-      }
-      o.position.x += (p.x - o.position.x) * .2;
-      o.position.z += (p.z - o.position.z) * .2;
-      if (typeof p.yaw === 'number') o.rotation.y = p.yaw;
-    });
-    var n = 1;
-    Object.keys(GAL.others).forEach(function (k) { n++; });
-    var c2 = $('galChip2');
-    if (c2) c2.textContent = '👥 ' + n + '명';
-  }
-
   /* ---------- 전시관 초기화 ---------- */
   function galInit() {
     if (GAL.ready) { galResize(); return; }
@@ -4686,6 +4675,7 @@ var qrcode = function() {
     var list = galSorted();
     var cnt = $('galCount'); if (cnt) cnt.textContent = list.length;
     var chip = $('galChip'); if (chip) chip.textContent = '🖼 작품 ' + list.length + '점';
+    var chip2 = $('galChip2'); if (chip2) chip2.textContent = '💬 댓글 ' + galCmtAll();
     var strip = $('galStrip');
     if (strip) {
       strip.innerHTML = '';
@@ -4784,11 +4774,12 @@ var qrcode = function() {
     if (big) big.onclick = function () {
       openLightbox({ image: it.image, desc: (it.title || '') + (it.desc ? ' · ' + it.desc : ''), num: it.num, name: it.name, badge: it.badge, likedBy: it.likedBy || [] });
     };
-    var cl = $('galCmCount'); if (cl) cl.textContent = (it.comments || []).length;
+    var cmts = galCmtsOf(it.id);
+    var cl = $('galCmCount'); if (cl) cl.textContent = cmts.length;
     var box = $('galCmList');
     if (box) {
       box.innerHTML = '';
-      var cm = (it.comments || []).slice().sort(function (a, b2) { return (a.ts || 0) - (b2.ts || 0); });
+      var cm = cmts;
       if (!cm.length) {
         var e = document.createElement('div');
         e.style.cssText = 'font-size:11.5px;color:#7b938c;font-weight:700;padding:4px 0';
@@ -4807,24 +4798,23 @@ var qrcode = function() {
     }
   }
   function galLike(it, liked) {
-    if (!colGallery) { toast('연결을 기다리는 중이에요'); return; }
+    if (!colWork) { toast('연결을 기다리는 중이에요'); return; }
     var FV = firebase.firestore.FieldValue;
     var upd = liked ? { likedBy: FV.arrayRemove(myUid) } : { likedBy: FV.arrayUnion(myUid) };
-    colGallery.doc(it.id).update(upd).catch(function (e) { handleDbError(e); toast('잠시 뒤 다시 눌러 주세요'); });
+    colWork.doc(it.id).update(upd).catch(function (e) { handleDbError(e); toast('잠시 뒤 다시 눌러 주세요'); });
   }
   function galComment() {
     var inp = $('galCmInput');
     if (!inp) return;
     var txt = (inp.value || '').trim();
     if (!txt) { inp.focus(); return; }
-    if (!colGallery || !galOpenId) return;
-    var FV = firebase.firestore.FieldValue;
-    var cm = {
-      uid: myUid, num: profile.num, name: profile.name, badge: profile.badge,
-      text: txt.slice(0, 80), ts: Date.now()
-    };
+    if (!colMsg || !galOpenId) { toast('연결을 기다리는 중이에요'); return; }
+    var wid = galOpenId;
     inp.value = '';
-    colGallery.doc(galOpenId).update({ comments: FV.arrayUnion(cm) }).catch(function (e) {
+    colMsg.add({
+      kind: 'artcmt', workId: wid, userId: myUid, num: profile.num, name: profile.name,
+      badge: profile.badge, text: txt.slice(0, 80), ts: Date.now(), pinned: false, teacher: false
+    }).catch(function (e) {
       handleDbError(e); toast('댓글을 남기지 못했어요');
     });
   }
@@ -4840,15 +4830,15 @@ var qrcode = function() {
   }
   function galSubmit() {
     if (!galPending) { toast('사진을 먼저 골라 주세요'); return; }
-    if (!colGallery) { toast('연결을 기다리는 중이에요'); return; }
+    if (!colWork) { toast('연결을 기다리는 중이에요'); return; }
     var title = ($('galTitle').value || '').trim().slice(0, 30);
     var desc = ($('galDesc').value || '').trim().slice(0, 60);
     if (!title) { toast('작품 제목을 적어 주세요 🖼'); $('galTitle').focus(); return; }
     var btn = $('galSubmit'); if (btn) btn.disabled = true;
-    colGallery.add({
+    colWork.add({
       userId: myUid, num: profile.num, name: profile.name, badge: profile.badge,
       title: title, desc: desc, image: galPending.data,
-      likedBy: [myUid], comments: [], ts: Date.now()
+      likedBy: [myUid], ts: Date.now()
     }).then(function () {
       toast('액자에 작품을 걸었어요! 친구들이 ❤️ 눌러 줄 거예요');
       galPending = null;
@@ -4975,30 +4965,12 @@ var qrcode = function() {
     } else {
       galInit();
     }
-    startPresence();
-    postPresence();
   }
   function galHide() {
     GAL.shown = false;
     if (GAL.raf) { cancelAnimationFrame(GAL.raf); GAL.raf = 0; }
     GAL.joy = null;
-    if (GAL.presTimer) { clearInterval(GAL.presTimer); GAL.presTimer = null; }
   }
-  function postPresence() {
-    if (!colPresence || !profile) return;
-    try {
-      colPresence.doc(myUid).set({
-        num: profile.num, name: profile.name, badge: profile.badge,
-        x: Math.round(GAL.pos.x * 100) / 100, z: Math.round(GAL.pos.z * 100) / 100,
-        yaw: Math.round(GAL.yaw * 100) / 100, ts: Date.now()
-      }, { merge: true }).catch(gWarn);
-    } catch (e) { gWarn(e); }
-  }
-  function startPresence() {
-    if (!colPresence || GAL.presTimer) return;
-    GAL.presTimer = setInterval(function () { if (GAL.shown) postPresence(); }, 2500);
-  }
-
   /* ---------- 이벤트 묶기 ---------- */
   function galBindUI() {
     on($('galZone'), 'click', function () { $('galFile').click(); });
